@@ -44,9 +44,11 @@
 
 void UART_init(void);
 void UART_sendChar(uint8_t u8_char);
+void UART_receiveChar(uint8_t* u8_val);
 void UART_sendString(uint8_t* u8_str);
+void UART_receiveString(uint8_t* u8_retStr);
 void UART_sendBytes(uint8_t u8_numBytes);
 void UART_receiveBytes(uint8_t numBytes,uint8_t* u8_val);
-void UART_receiveChar(uint8_t* u8_val);
+
 
 #endif /* UART_INTERFACE_H_ */

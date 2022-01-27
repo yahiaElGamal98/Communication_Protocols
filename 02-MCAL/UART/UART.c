@@ -35,3 +35,29 @@ void UART_sendChar(uint8_t u8_char)
 	while(LOW==((UCSRA&(HIGH<<UDRE))>>UDRE));
 	UDR=u8_char;
 }
+void UART_sendString(uint8_t* u8_str)
+{
+	uint8_t u8_index=0;
+	while((u8_str[u8_index]!='\0')&&(u8_str[u8_index]!='\r')&&(u8_str[u8_index]!='\n'))
+	{
+		UART_sendChar(u8_str[u8_index]);
+		u8_index++;
+	}
+}
+void UART_receiveString(uint8_t* u8_retStr)
+{
+	uint8_t u8_index=0;
+	while(u8_index<255)
+	{
+		UART_receiveChar(&u8_retStr[u8_index]);
+		if('\0'==u8_retStr[u8_index] ||'\n'==u8_retStr[u8_index] ||'\r'==u8_retStr[u8_index])
+		{
+			u8_retStr[u8_index]='\0';
+			break;
+		}
+		else
+		{
+			u8_index++;
+		}
+	}
+}
