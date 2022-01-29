@@ -3,29 +3,29 @@ Sprint6_COMM.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000000b2  00000000  00000000  00000054  2**1
+  0 .text         000000a4  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000106  2**0
+  1 .data         00000000  00800060  00800060  000000f8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  00000106  2**0
+  2 .comment      00000030  00000000  00000000  000000f8  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000138  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000128  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000050  00000000  00000000  00000174  2**0
+  4 .debug_aranges 00000058  00000000  00000000  00000164  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000006c2  00000000  00000000  000001c4  2**0
+  5 .debug_info   000006c6  00000000  00000000  000001bc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000005d0  00000000  00000000  00000886  2**0
+  6 .debug_abbrev 000005c5  00000000  00000000  00000882  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000276  00000000  00000000  00000e56  2**0
+  7 .debug_line   000002b0  00000000  00000000  00000e47  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000078  00000000  00000000  000010cc  2**2
+  8 .debug_frame  00000078  00000000  00000000  000010f8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000341  00000000  00000000  00001144  2**0
+  9 .debug_str    00000376  00000000  00000000  00001170  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000048  00000000  00000000  00001485  2**0
+ 10 .debug_loc    00000047  00000000  00000000  000014e6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000030  00000000  00000000  000014cd  2**0
+ 11 .debug_ranges 00000038  00000000  00000000  0000152d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -60,87 +60,70 @@ Disassembly of section .text:
   5a:	d8 e0       	ldi	r29, 0x08	; 8
   5c:	de bf       	out	0x3e, r29	; 62
   5e:	cd bf       	out	0x3d, r28	; 61
-  60:	0e 94 48 00 	call	0x90	; 0x90 <main>
-  64:	0c 94 57 00 	jmp	0xae	; 0xae <_exit>
+  60:	0e 94 4a 00 	call	0x94	; 0x94 <main>
+  64:	0c 94 50 00 	jmp	0xa0	; 0xa0 <_exit>
 
 00000068 <__bad_interrupt>:
   68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-0000006c <UART_init>:
-#define LOW 0
-
-void UART_init()
-{
-	//set baud rate
-	UBRRL=(uint8_t)(BAUD_RATE);
-  6c:	83 e3       	ldi	r24, 0x33	; 51
-  6e:	89 b9       	out	0x09, r24	; 9
-	//select UBRRH and shift right the baud rate to set the remaining bits
-	UBRRH_UCSRC= (uint8_t)(BAUD_RATE>> REG_SIZE);
-  70:	10 bc       	out	0x20, r1	; 32
-	//enable transmit and receive of UART
-	UCSRB= (HIGH<<RXEN) | (HIGH<<TXEN);   
-  72:	88 e1       	ldi	r24, 0x18	; 24
-  74:	8a b9       	out	0x0a, r24	; 10
-	// select UCSRC register and configure 8 bits of data in a frame with 1 stop bit and user configured parity
-	UBRRH_UCSRC = (HIGH<<URSEL) | (PARITY_MODE<<UPM0) | (STOP_MODE<<USBS) | (HIGH<<UCSZ1) | (HIGH <<UCSZ0); 
-  76:	86 e8       	ldi	r24, 0x86	; 134
-  78:	80 bd       	out	0x20, r24	; 32
-  7a:	08 95       	ret
-
-0000007c <UART_receiveChar>:
+0000006c <SPI_masterInit>:
 }
-void UART_receiveChar(uint8_t* u8_val)
+void SPI_slaveInit()
 {
-	while(LOW==((UCSRA&(HIGH<<RXC))>>RXC));
-  7c:	5f 9b       	sbis	0x0b, 7	; 11
-  7e:	fe cf       	rjmp	.-4      	; 0x7c <UART_receiveChar>
-	*u8_val=UDR;
-  80:	2c b1       	in	r18, 0x0c	; 12
-  82:	fc 01       	movw	r30, r24
-  84:	20 83       	st	Z, r18
-  86:	08 95       	ret
+	SPI_DDR |= (HIGH<<MISO);
+	SPI_DDR &=~((HIGH<<MOSI)|(HIGH<<SCK)|(HIGH<<SS));
+	SPCR = HIGH<<SPE;
+  6c:	87 b3       	in	r24, 0x17	; 23
+  6e:	80 6b       	ori	r24, 0xB0	; 176
+  70:	87 bb       	out	0x17, r24	; 23
+  72:	87 b3       	in	r24, 0x17	; 23
+  74:	8f 7b       	andi	r24, 0xBF	; 191
+  76:	87 bb       	out	0x17, r24	; 23
+  78:	88 b3       	in	r24, 0x18	; 24
+  7a:	80 61       	ori	r24, 0x10	; 16
+  7c:	88 bb       	out	0x18, r24	; 24
+  7e:	87 e5       	ldi	r24, 0x57	; 87
+  80:	8d b9       	out	0x0d, r24	; 13
+  82:	08 95       	ret
 
-00000088 <UART_sendChar>:
+00000084 <SPI_masterTransmit>:
 }
-void UART_sendChar(uint8_t u8_char)
+void SPI_masterTransmit(uint8_t u8_data)
 {
-	while(LOW==((UCSRA&(HIGH<<UDRE))>>UDRE));
-  88:	5d 9b       	sbis	0x0b, 5	; 11
-  8a:	fe cf       	rjmp	.-4      	; 0x88 <UART_sendChar>
-	UDR=u8_char;
-  8c:	8c b9       	out	0x0c, r24	; 12
-  8e:	08 95       	ret
+	SPI_PORT&=~(HIGH<<SS);
+  84:	98 b3       	in	r25, 0x18	; 24
+  86:	9f 7e       	andi	r25, 0xEF	; 239
+  88:	98 bb       	out	0x18, r25	; 24
+	uint8_t u8_flushHelper;
+	SPDR=u8_data;
+  8a:	8f b9       	out	0x0f, r24	; 15
+	while(LOW==((SPSR&(HIGH<<SPIF))>>SPIF));
+  8c:	77 9b       	sbis	0x0e, 7	; 14
+  8e:	fe cf       	rjmp	.-4      	; 0x8c <SPI_masterTransmit+0x8>
+	u8_flushHelper=SPDR;
+  90:	8f b1       	in	r24, 0x0f	; 15
+  92:	08 95       	ret
 
-00000090 <main>:
-
-#include "./01-LIB/STD_types.h"
-#include "./02-MCAL/UART/UART_interface.h"
+00000094 <main>:
+#include "./02-MCAL/SPI/SPI_interface.h"
 
 int main(void)
 {
-  90:	cf 93       	push	r28
-  92:	df 93       	push	r29
-  94:	1f 92       	push	r1
-  96:	cd b7       	in	r28, 0x3d	; 61
-  98:	de b7       	in	r29, 0x3e	; 62
-	uint8_t u8_val;
-	UART_init();
-  9a:	0e 94 36 00 	call	0x6c	; 0x6c <UART_init>
+	uint8_t u8_val=0x03;
+	SPI_masterInit();
+  94:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_masterInit>
     /* Replace with your application code */
     while (1) 
     {
-		UART_receiveChar(&u8_val);
-  9e:	ce 01       	movw	r24, r28
-  a0:	01 96       	adiw	r24, 0x01	; 1
-  a2:	0e 94 3e 00 	call	0x7c	; 0x7c <UART_receiveChar>
-		UART_sendChar(u8_val);
-  a6:	89 81       	ldd	r24, Y+1	; 0x01
-  a8:	0e 94 44 00 	call	0x88	; 0x88 <UART_sendChar>
-  ac:	f8 cf       	rjmp	.-16     	; 0x9e <main+0xe>
+		//SPI_slaveReceive(&u8_val);
+		//PORTA_DATA=u8_val;
+		SPI_masterTransmit(u8_val);
+  98:	83 e0       	ldi	r24, 0x03	; 3
+  9a:	0e 94 42 00 	call	0x84	; 0x84 <SPI_masterTransmit>
+  9e:	fc cf       	rjmp	.-8      	; 0x98 <main+0x4>
 
-000000ae <_exit>:
-  ae:	f8 94       	cli
+000000a0 <_exit>:
+  a0:	f8 94       	cli
 
-000000b0 <__stop_program>:
-  b0:	ff cf       	rjmp	.-2      	; 0xb0 <__stop_program>
+000000a2 <__stop_program>:
+  a2:	ff cf       	rjmp	.-2      	; 0xa2 <__stop_program>

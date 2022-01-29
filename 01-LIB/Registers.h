@@ -9,6 +9,9 @@
 #ifndef REGISTERS_H_
 #define REGISTERS_H_
 
+#define SPDR (*((volatile uint8_t *)(0x2F)))
+#define SPCR (*((volatile uint8_t *)(0x2D)))
+#define SPSR (*((volatile uint8_t *)(0x2E)))
 
 #define UBRRH_UCSRC (*((volatile uint8_t *)(0x40)))
 #define UBRRL (*((volatile uint8_t *)(0x29)))
