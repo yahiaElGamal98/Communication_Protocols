@@ -22,8 +22,6 @@ int main(void)
 		//SPI_slaveReceive(&u8_val);
 		//PORTA_DATA=u8_val;
 		SPI_masterTransmit(u8_val);
-		//UART_receiveChar(&u8_val);
-		//UART_sendChar(u8_val);
     }
 }
 
