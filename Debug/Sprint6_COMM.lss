@@ -3,29 +3,29 @@ Sprint6_COMM.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000000a4  00000000  00000000  00000054  2**1
+  0 .text         000000aa  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000000f8  2**0
+  1 .data         00000000  00800060  00800060  000000fe  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  000000f8  2**0
+  2 .comment      00000030  00000000  00000000  000000fe  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000128  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000130  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000058  00000000  00000000  00000164  2**0
+  4 .debug_aranges 00000058  00000000  00000000  0000016c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000006c6  00000000  00000000  000001bc  2**0
+  5 .debug_info   000006ca  00000000  00000000  000001c4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000005c5  00000000  00000000  00000882  2**0
+  6 .debug_abbrev 000005d4  00000000  00000000  0000088e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000002b0  00000000  00000000  00000e47  2**0
+  7 .debug_line   000002b0  00000000  00000000  00000e62  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000078  00000000  00000000  000010f8  2**2
+  8 .debug_frame  00000078  00000000  00000000  00001114  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000376  00000000  00000000  00001170  2**0
+  9 .debug_str    00000376  00000000  00000000  0000118c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000047  00000000  00000000  000014e6  2**0
+ 10 .debug_loc    0000002d  00000000  00000000  00001502  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000038  00000000  00000000  0000152d  2**0
+ 11 .debug_ranges 00000038  00000000  00000000  0000152f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -60,8 +60,8 @@ Disassembly of section .text:
   5a:	d8 e0       	ldi	r29, 0x08	; 8
   5c:	de bf       	out	0x3e, r29	; 62
   5e:	cd bf       	out	0x3d, r28	; 61
-  60:	0e 94 4a 00 	call	0x94	; 0x94 <main>
-  64:	0c 94 50 00 	jmp	0xa0	; 0xa0 <_exit>
+  60:	0e 94 4d 00 	call	0x9a	; 0x9a <main>
+  64:	0c 94 53 00 	jmp	0xa6	; 0xa6 <_exit>
 
 00000068 <__bad_interrupt>:
   68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -82,7 +82,7 @@ void SPI_slaveInit()
   78:	88 b3       	in	r24, 0x18	; 24
   7a:	80 61       	ori	r24, 0x10	; 16
   7c:	88 bb       	out	0x18, r24	; 24
-  7e:	87 e5       	ldi	r24, 0x57	; 87
+  7e:	82 e5       	ldi	r24, 0x52	; 82
   80:	8d b9       	out	0x0d, r24	; 13
   82:	08 95       	ret
 
@@ -102,28 +102,32 @@ void SPI_masterTransmit(uint8_t u8_data)
   8e:	fe cf       	rjmp	.-4      	; 0x8c <SPI_masterTransmit+0x8>
 	u8_flushHelper=SPDR;
   90:	8f b1       	in	r24, 0x0f	; 15
-  92:	08 95       	ret
+	SPI_PORT|=(HIGH<<SS);
+  92:	88 b3       	in	r24, 0x18	; 24
+  94:	80 61       	ori	r24, 0x10	; 16
+  96:	88 bb       	out	0x18, r24	; 24
+  98:	08 95       	ret
 
-00000094 <main>:
+0000009a <main>:
 #include "./02-MCAL/SPI/SPI_interface.h"
 
 int main(void)
 {
-	uint8_t u8_val=0x03;
+	uint8_t u8_val=0xf8;
 	SPI_masterInit();
-  94:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_masterInit>
+  9a:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_masterInit>
     /* Replace with your application code */
     while (1) 
     {
 		//SPI_slaveReceive(&u8_val);
 		//PORTA_DATA=u8_val;
 		SPI_masterTransmit(u8_val);
-  98:	83 e0       	ldi	r24, 0x03	; 3
-  9a:	0e 94 42 00 	call	0x84	; 0x84 <SPI_masterTransmit>
-  9e:	fc cf       	rjmp	.-8      	; 0x98 <main+0x4>
+  9e:	88 ef       	ldi	r24, 0xF8	; 248
+  a0:	0e 94 42 00 	call	0x84	; 0x84 <SPI_masterTransmit>
+  a4:	fc cf       	rjmp	.-8      	; 0x9e <main+0x4>
 
-000000a0 <_exit>:
-  a0:	f8 94       	cli
+000000a6 <_exit>:
+  a6:	f8 94       	cli
 
-000000a2 <__stop_program>:
-  a2:	ff cf       	rjmp	.-2      	; 0xa2 <__stop_program>
+000000a8 <__stop_program>:
+  a8:	ff cf       	rjmp	.-2      	; 0xa8 <__stop_program>

@@ -29,12 +29,11 @@ void SPI_masterTransmit(uint8_t u8_data)
 	SPDR=u8_data;
 	while(LOW==((SPSR&(HIGH<<SPIF))>>SPIF));
 	u8_flushHelper=SPDR;
-
+	SPI_PORT|=(HIGH<<SS);
 }
 void SPI_slaveReceive(uint8_t * pu8_data)
 {
 	SPDR=0xFF;
 	while(LOW==((SPSR&(HIGH<<SPIF))>>SPIF));
 	*pu8_data=SPDR;
-	SPI_PORT|=(HIGH<<SS);
 }
