@@ -41,6 +41,8 @@ void SPI_masterInit(void);
 void SPI_slaveInit(void);
 void SPI_masterTransmit(uint8_t u8_data);
 void SPI_slaveReceive(uint8_t * pu8_data);
+void SPI_masterTransmitString(uint8_t* u8_str);
+void SPI_slaveReceiveString(uint8_t* u8_retStr);
 
 
 

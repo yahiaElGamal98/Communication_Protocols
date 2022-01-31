@@ -126,8 +126,19 @@
     <Compile Include="01-LIB\STD_types.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="02-MCAL\DIO_Git\DIO.c" />
+    <Compile Include="02-MCAL\DIO_Git\DIO.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="02-MCAL\DIO_Git\DIO.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\SPI\SPI_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\SPI\SPI_implementation.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\SPI\SPI_interface.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="02-MCAL\UART\UART.c">
@@ -145,7 +156,7 @@
     <Compile Include="03-HAL\LED\LED.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="main.c">
+    <Compile Include="UART_SPI_Slave_main.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
@@ -154,6 +165,7 @@
     <Folder Include="01-LIB\" />
     <Folder Include="02-MCAL\" />
     <Folder Include="02-MCAL\DIO_Git\" />
+    <Folder Include="02-MCAL\SPI\" />
     <Folder Include="02-MCAL\UART\" />
     <Folder Include="03-HAL\" />
     <Folder Include="03-HAL\LED\" />
