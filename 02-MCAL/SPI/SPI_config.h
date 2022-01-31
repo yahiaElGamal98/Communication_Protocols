@@ -16,7 +16,7 @@ f/16 -> 1 (AVOID)
 f/64 -> 2
 f/128 -> 3
 */
-#define SPI_CR 2  // f/16 as default
+#define SPI_CR 3  // f/16 as default
 /*
 SPI MODE OPTIONS
 mode 1 -> 0 (ACTIVE HIGH) Data sampled on rising edge and shifted out on the falling edge
