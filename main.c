@@ -12,7 +12,7 @@
 
 int main(void)
 {
-	uint8_t u8_val=0xf8;
+	uint8_t u8_val=0xff;
 	SPI_masterInit();
 	//SPI_slaveInit();
 	//PORTA_DIR=0xFF;
