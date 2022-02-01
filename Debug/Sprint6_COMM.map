@@ -7,6 +7,33 @@ Discarded input sections
 
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
  .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
+ .text          0x00000000        0x0 02-MCAL/I2C/I2C.o
+ .data          0x00000000        0x0 02-MCAL/I2C/I2C.o
+ .bss           0x00000000        0x0 02-MCAL/I2C/I2C.o
+ .text.I2C_masterStartRead
+                0x00000000       0x22 02-MCAL/I2C/I2C.o
+ .text.I2C_masterStartWrite
+                0x00000000       0x24 02-MCAL/I2C/I2C.o
+ .text.I2C_masterSendData
+                0x00000000       0x10 02-MCAL/I2C/I2C.o
+ .text.I2C_masterReceiveDataAck
+                0x00000000       0x1c 02-MCAL/I2C/I2C.o
+ .text.I2C_masterReceiveDataNAck
+                0x00000000       0x1c 02-MCAL/I2C/I2C.o
+ .text.I2C_stop
+                0x00000000        0xc 02-MCAL/I2C/I2C.o
+ .text.I2C_masterRepeatedStartRead
+                0x00000000        0x6 02-MCAL/I2C/I2C.o
+ .debug_info    0x00000000      0x187 02-MCAL/I2C/I2C.o
+ .debug_abbrev  0x00000000       0x8e 02-MCAL/I2C/I2C.o
+ .debug_loc     0x00000000       0xed 02-MCAL/I2C/I2C.o
+ .debug_aranges
+                0x00000000       0x50 02-MCAL/I2C/I2C.o
+ .debug_ranges  0x00000000       0x40 02-MCAL/I2C/I2C.o
+ .debug_line    0x00000000      0x1b6 02-MCAL/I2C/I2C.o
+ .debug_str     0x00000000      0x221 02-MCAL/I2C/I2C.o
+ .comment       0x00000000       0x31 02-MCAL/I2C/I2C.o
+ .debug_frame   0x00000000       0x84 02-MCAL/I2C/I2C.o
  .text          0x00000000        0x0 02-MCAL/UART/UART.o
  .data          0x00000000        0x0 02-MCAL/UART/UART.o
  .bss           0x00000000        0x0 02-MCAL/UART/UART.o
@@ -45,6 +72,7 @@ user_signatures  0x00850000         0x00000400         rw !x
 Linker script and memory map
 
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
+LOAD 02-MCAL/I2C/I2C.o
 LOAD 02-MCAL/UART/UART.o
 LOAD main.o
 START GROUP
@@ -373,17 +401,17 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x6c2
+.debug_info     0x00000000      0x6cd
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_info    0x000004e6       0xe1 02-MCAL/UART/UART.o
- .debug_info    0x000005c7       0xfb main.o
+ .debug_info    0x000005c7      0x106 main.o
 
-.debug_abbrev   0x00000000      0x5d0
+.debug_abbrev   0x00000000      0x5dd
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_abbrev  0x000004a3       0x90 02-MCAL/UART/UART.o
- .debug_abbrev  0x00000533       0x9d main.o
+ .debug_abbrev  0x00000533       0xaa main.o
 
 .debug_line     0x00000000      0x276
  *(.debug_line .debug_line.* .debug_line_end)
@@ -396,13 +424,13 @@ END GROUP
  .debug_frame   0x00000000       0x44 02-MCAL/UART/UART.o
  .debug_frame   0x00000044       0x34 main.o
 
-.debug_str      0x00000000      0x341
+.debug_str      0x00000000      0x354
  *(.debug_str)
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x19a 02-MCAL/UART/UART.o
                                 0x1b8 (size before relaxing)
- .debug_str     0x00000330       0x11 main.o
-                                0x1aa (size before relaxing)
+ .debug_str     0x00000330       0x24 main.o
+                                0x1b6 (size before relaxing)
 
 .debug_loc      0x00000000       0x48
  *(.debug_loc)

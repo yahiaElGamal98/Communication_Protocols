@@ -14,7 +14,10 @@
 #define HIGH 1
 #define LOW 0
 
-void I2C_init(void);
+void I2C_init(void)
+{
+	
+}
 void I2C_masterStartRead(uint8_t u8_SLA)
 {
 	TWCR = (HIGH<<TWINT) | (HIGH<<TWSTA) | (HIGH <<TWEN);
@@ -91,7 +94,7 @@ void I2C_masterReceiveDataAck(uint8_t * u8_data)
 }
 void I2C_masterReceiveDataNAck(uint8_t * u8_data)
 {
-	TWCR = (HIGH<<TWINT) | (HIGH<<TWEA) | (HIGH <<TWEN);
+	TWCR = (HIGH<<TWINT) | (HIGH <<TWEN);
 	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT))
 	if(M_DATA_R_NACK!=(TWSR&TWSR_MASK))
 	{
@@ -109,5 +112,49 @@ void I2C_stop()
 }
 void I2C_masterRepeatedStartRead(uint8_t u8_SLA)
 {
-	TWCR = (HIGH<<TWINT) | (HIGH<<TWSTA) | (HIGH <<TWEN);	
+	TWCR = (HIGH<<TWINT) | (HIGH<<TWSTA) | (HIGH <<TWEN);
+	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT));
+	if(M_REPEATED_START==(TWSR&TWSR_MASK))
+	{
+		TWDR=u8_SLA+READ;
+	}
+	else
+	{
+		//err
+	}
+	TWCR= (HIGH<<TWINT)|(HIGH<<TWEN);
+	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT));
+	
 }
+
+void I2C_slaveListen()
+{
+	while(1)
+	{
+		while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT));
+		if(S_SLA_W_ACK==(TWSR&TWSR_MASK)||S_SLA_R_ACK==(TWSR&TWSR_MASK)||S_GENERAL_CALL_ACK==(TWSR&TWSR_MASK))
+		{
+			break;
+		}
+		else
+		{
+			continue;
+		}
+	}
+	
+}
+void I2C_slaveReceiveDataAck(uint8_t * u8_data)
+{
+	TWCR = (HIGH<<TWINT) | (HIGH <<TWEN);
+	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT))
+	if(S_DATA_R_ACK==(TWSR&TWSR_MASK)||S_LAST_DATA_R_NACK==(TWSR&TWSR_MASK))
+	{
+		*u8_data=TWDR;
+	}
+	else if(S_LAST_DATA_R_NACK)
+	{
+		
+	}
+	
+}
+

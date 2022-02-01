@@ -135,6 +135,15 @@
     <Compile Include="02-MCAL\I2C\I2C_interface.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="02-MCAL\UART\UART.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\UART\UART_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\UART\UART_interface.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -144,6 +153,7 @@
     <Folder Include="01-LIB\" />
     <Folder Include="02-MCAL\" />
     <Folder Include="02-MCAL\I2C\" />
+    <Folder Include="02-MCAL\UART\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

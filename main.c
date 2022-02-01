@@ -10,13 +10,14 @@
 
 int main(void)
 {
-	uint8_t u8_val;
+	uint8_t u8_send;
+	uint8_t u8_receive;
 	UART_init();
     /* Replace with your application code */
     while (1) 
     {
-		UART_receiveChar(&u8_val);
-		UART_sendChar(u8_val);
+		UART_receiveChar(&u8_send);
+		UART_sendChar(u8_send);
     }
 }
 
