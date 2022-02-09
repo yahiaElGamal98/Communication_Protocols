@@ -144,7 +144,7 @@
     <Compile Include="02-MCAL\UART\UART_interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="main.c">
+    <Compile Include="master_main.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

@@ -52,8 +52,8 @@
 #define TWPS0 0
 #define TWSR_MASK 0xF8
 
-#define WRITE 1
-#define READ 0
+#define WRITE 0
+#define READ 1
 
 #define HIGH 1
 #define LOW 0
@@ -66,6 +66,9 @@ void I2C_masterReceiveDataAck(uint8_t * u8_data);
 void I2C_masterReceiveDataNAck(uint8_t * u8_data);
 void I2C_masterRepeatedStart(uint8_t SLA);
 void I2C_stop();
+void I2C_slaveListen(void);
+void I2C_slaveReceiveDataAck(uint8_t * u8_data);
+void I2C_slaveInit(uint8_t SLA);
 
 
 #endif /* UART_INTERFACE_H_ */
