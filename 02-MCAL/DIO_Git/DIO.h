@@ -12,11 +12,17 @@
 #define HIGH 1     //HIGH MACRO set bit (1)
 #define LOW 0      //LOW MACRO set bit (0)
 
+#define PORT_A 'A'
+#define PORT_B 'B'
+#define PORT_C 'C'
+#define PORT_D 'D'
+
 typedef enum DIR //enum for direction  either input (0) or output (1)
 {
 	INPUT=0,	//INPUT LOW	
 	OUTPUT=1	//OUTPUT HIGH
 }EN_Dir;
+
 
 
 typedef enum PINS //enum for pins bit 0 to 7

@@ -58,16 +58,23 @@
 #define HIGH 1
 #define LOW 0
 
+typedef enum 
+{
+	E_NOK,
+	E_OK
+	}EN_ErrorStatus_t;
+
 void I2C_init(void);
-void I2C_masterStartRead(uint8_t SLA);
-void I2C_masterStartWrite(uint8_t SLA);
-void I2C_masterSendData(uint8_t u8_data);
-void I2C_masterReceiveDataAck(uint8_t * u8_data);
-void I2C_masterReceiveDataNAck(uint8_t * u8_data);
-void I2C_masterRepeatedStart(uint8_t SLA);
+EN_ErrorStatus_t I2C_masterStartRead(uint8_t SLA);
+EN_ErrorStatus_t I2C_masterStartWrite(uint8_t SLA);
+EN_ErrorStatus_t I2C_masterSendData(uint8_t u8_data);
+EN_ErrorStatus_t I2C_masterReceiveDataAck(uint8_t * u8_data);
+EN_ErrorStatus_t I2C_masterReceiveDataNAck(uint8_t * u8_data);
+EN_ErrorStatus_t I2C_masterRepeatedStartRead(uint8_t SLA);
+EN_ErrorStatus_t I2C_masterRepeatedStartWrite(uint8_t u8_SLA);
 void I2C_stop();
 void I2C_slaveListen(void);
-void I2C_slaveReceiveDataAck(uint8_t * u8_data);
+EN_ErrorStatus_t I2C_slaveReceiveDataAck(uint8_t * u8_data);
 void I2C_slaveInit(uint8_t SLA);
 
 

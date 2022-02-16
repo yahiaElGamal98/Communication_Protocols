@@ -3,29 +3,29 @@ Sprint6_COMM.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000116  00000000  00000000  00000054  2**1
+  0 .text         000000f8  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  0000016a  2**0
+  1 .data         00000000  00800060  00800060  0000014c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  0000016a  2**0
+  2 .comment      00000030  00000000  00000000  0000014c  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000019c  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000017c  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000098  00000000  00000000  000001d8  2**0
+  4 .debug_aranges 00000098  00000000  00000000  000001b8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   0000086e  00000000  00000000  00000270  2**0
+  5 .debug_info   00000870  00000000  00000000  00000250  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 0000063d  00000000  00000000  00000ade  2**0
+  6 .debug_abbrev 0000060f  00000000  00000000  00000ac0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000004bc  00000000  00000000  0000111b  2**0
+  7 .debug_line   00000565  00000000  00000000  000010cf  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000108  00000000  00000000  000015d8  2**2
+  8 .debug_frame  000000f8  00000000  00000000  00001634  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000425  00000000  00000000  000016e0  2**0
+  9 .debug_str    00000431  00000000  00000000  0000172c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000001ce  00000000  00000000  00001b05  2**0
+ 10 .debug_loc    0000026e  00000000  00000000  00001b5d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000078  00000000  00000000  00001cd3  2**0
+ 11 .debug_ranges 00000078  00000000  00000000  00001dcb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -60,24 +60,24 @@ Disassembly of section .text:
   5a:	d8 e0       	ldi	r29, 0x08	; 8
   5c:	de bf       	out	0x3e, r29	; 62
   5e:	cd bf       	out	0x3d, r28	; 61
-  60:	0e 94 7a 00 	call	0xf4	; 0xf4 <main>
-  64:	0c 94 89 00 	jmp	0x112	; 0x112 <_exit>
+  60:	0e 94 6f 00 	call	0xde	; 0xde <main>
+  64:	0c 94 7a 00 	jmp	0xf4	; 0xf4 <_exit>
 
 00000068 <__bad_interrupt>:
   68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000006c <I2C_init>:
-void I2C_masterReceiveDataNAck(uint8_t * u8_data)
-{
-	TWCR = (HIGH<<TWINT) | (HIGH <<TWEN);
-	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT))
-	while(M_DATA_R_NACK!=(TWSR&TWSR_MASK));
-	*u8_data=TWDR;
-  6c:	82 e0       	ldi	r24, 0x02	; 2
-  6e:	80 b9       	out	0x00, r24	; 0
-  70:	81 b1       	in	r24, 0x01	; 1
-  72:	8c 7f       	andi	r24, 0xFC	; 252
-  74:	81 b9       	out	0x01, r24	; 1
+	else
+	{
+		*u8_data=TWDR;
+		return E_OK;
+	}	
+}
+  6c:	81 b1       	in	r24, 0x01	; 1
+  6e:	8c 7f       	andi	r24, 0xFC	; 252
+  70:	81 b9       	out	0x01, r24	; 1
+  72:	82 e0       	ldi	r24, 0x02	; 2
+  74:	80 b9       	out	0x00, r24	; 0
   76:	08 95       	ret
 
 00000078 <I2C_masterStartWrite>:
@@ -89,7 +89,7 @@ void I2C_masterReceiveDataNAck(uint8_t * u8_data)
   82:	91 b1       	in	r25, 0x01	; 1
   84:	98 7f       	andi	r25, 0xF8	; 248
   86:	98 30       	cpi	r25, 0x08	; 8
-  88:	e1 f7       	brne	.-8      	; 0x82 <I2C_masterStartWrite+0xa>
+  88:	61 f4       	brne	.+24     	; 0xa2 <I2C_masterStartWrite+0x2a>
   8a:	83 b9       	out	0x03, r24	; 3
   8c:	84 e8       	ldi	r24, 0x84	; 132
   8e:	86 bf       	out	0x36, r24	; 54
@@ -99,105 +99,72 @@ void I2C_masterReceiveDataNAck(uint8_t * u8_data)
   96:	81 b1       	in	r24, 0x01	; 1
   98:	88 7f       	andi	r24, 0xF8	; 248
   9a:	88 31       	cpi	r24, 0x18	; 24
-  9c:	e1 f7       	brne	.-8      	; 0x96 <I2C_masterStartWrite+0x1e>
-  9e:	08 95       	ret
+  9c:	21 f0       	breq	.+8      	; 0xa6 <I2C_masterStartWrite+0x2e>
+  9e:	80 e0       	ldi	r24, 0x00	; 0
+  a0:	08 95       	ret
+  a2:	80 e0       	ldi	r24, 0x00	; 0
+  a4:	08 95       	ret
+  a6:	81 e0       	ldi	r24, 0x01	; 1
+  a8:	08 95       	ret
 
-000000a0 <I2C_masterSendData>:
-  a0:	83 b9       	out	0x03, r24	; 3
-  a2:	84 e8       	ldi	r24, 0x84	; 132
-  a4:	86 bf       	out	0x36, r24	; 54
-  a6:	06 b6       	in	r0, 0x36	; 54
-  a8:	07 fe       	sbrs	r0, 7
-  aa:	fd cf       	rjmp	.-6      	; 0xa6 <I2C_masterSendData+0x6>
-  ac:	81 b1       	in	r24, 0x01	; 1
-  ae:	88 7f       	andi	r24, 0xF8	; 248
-  b0:	88 32       	cpi	r24, 0x28	; 40
-  b2:	e1 f7       	brne	.-8      	; 0xac <I2C_masterSendData+0xc>
-  b4:	08 95       	ret
+000000aa <I2C_masterSendData>:
+  aa:	83 b9       	out	0x03, r24	; 3
+  ac:	84 e8       	ldi	r24, 0x84	; 132
+  ae:	86 bf       	out	0x36, r24	; 54
+  b0:	06 b6       	in	r0, 0x36	; 54
+  b2:	07 fe       	sbrs	r0, 7
+  b4:	fd cf       	rjmp	.-6      	; 0xb0 <I2C_masterSendData+0x6>
+  b6:	81 b1       	in	r24, 0x01	; 1
+  b8:	88 7f       	andi	r24, 0xF8	; 248
+  ba:	88 32       	cpi	r24, 0x28	; 40
+  bc:	31 f0       	breq	.+12     	; 0xca <I2C_masterSendData+0x20>
+  be:	81 b1       	in	r24, 0x01	; 1
+  c0:	88 7f       	andi	r24, 0xF8	; 248
+  c2:	80 33       	cpi	r24, 0x30	; 48
+  c4:	21 f4       	brne	.+8      	; 0xce <I2C_masterSendData+0x24>
+  c6:	81 e0       	ldi	r24, 0x01	; 1
+  c8:	08 95       	ret
+  ca:	81 e0       	ldi	r24, 0x01	; 1
+  cc:	08 95       	ret
+  ce:	80 e0       	ldi	r24, 0x00	; 0
+  d0:	08 95       	ret
 
-000000b6 <I2C_stop>:
-}
+000000d2 <I2C_stop>:
 void I2C_stop()
 {
 	TWCR=(HIGH<<TWINT) | (HIGH<<TWSTO) |(HIGH<<TWEN);
-  b6:	84 e9       	ldi	r24, 0x94	; 148
-  b8:	86 bf       	out	0x36, r24	; 54
-	while(LOW==((TWCR&(HIGH<<TWINT))>>TWINT));
-  ba:	06 b6       	in	r0, 0x36	; 54
-  bc:	07 fe       	sbrs	r0, 7
-  be:	fd cf       	rjmp	.-6      	; 0xba <I2C_stop+0x4>
+  d2:	84 e9       	ldi	r24, 0x94	; 148
+  d4:	86 bf       	out	0x36, r24	; 54
+	while(LOW==((TWCR&(HIGH<<TWSTO))>>TWSTO));
+  d6:	06 b6       	in	r0, 0x36	; 54
+  d8:	04 fe       	sbrs	r0, 4
+  da:	fd cf       	rjmp	.-6      	; 0xd6 <I2C_stop+0x4>
 }
-  c0:	08 95       	ret
+  dc:	08 95       	ret
 
-000000c2 <msdelay>:
-		I2C_stop();
-		msdelay(1000);
-    }
-}
-void msdelay(uint16_t u16_time)
-{
-  c2:	cf 93       	push	r28
-  c4:	df 93       	push	r29
-  c6:	00 d0       	rcall	.+0      	; 0xc8 <msdelay+0x6>
-  c8:	1f 92       	push	r1
-  ca:	cd b7       	in	r28, 0x3d	; 61
-  cc:	de b7       	in	r29, 0x3e	; 62
-	volatile uint16_t u16_index;
-	volatile uint8_t u8_index;
-	for(u16_index=0;u16_index<u16_time;u16_index++)
-  ce:	1a 82       	std	Y+2, r1	; 0x02
-  d0:	19 82       	std	Y+1, r1	; 0x01
-  d2:	29 81       	ldd	r18, Y+1	; 0x01
-  d4:	3a 81       	ldd	r19, Y+2	; 0x02
-  d6:	28 17       	cp	r18, r24
-  d8:	39 07       	cpc	r19, r25
-  da:	30 f4       	brcc	.+12     	; 0xe8 <msdelay+0x26>
-	{
-		for(u8_index=0;u8_index<450;u8_index++);
-  dc:	1b 82       	std	Y+3, r1	; 0x03
-  de:	8b 81       	ldd	r24, Y+3	; 0x03
-  e0:	8b 81       	ldd	r24, Y+3	; 0x03
-  e2:	8f 5f       	subi	r24, 0xFF	; 255
-  e4:	8b 83       	std	Y+3, r24	; 0x03
-  e6:	fb cf       	rjmp	.-10     	; 0xde <msdelay+0x1c>
-	}
-	
-}
-  e8:	0f 90       	pop	r0
-  ea:	0f 90       	pop	r0
-  ec:	0f 90       	pop	r0
-  ee:	df 91       	pop	r29
-  f0:	cf 91       	pop	r28
-  f2:	08 95       	ret
+000000de <main>:
 
-000000f4 <main>:
-#define SLAVE_ADD 0x10
-void msdelay(uint16_t u16_time);
+
 int main(void)
 {
-	uint8_t u8_send;
+	uint8_t u8_send=0x86;
 	I2C_init();
-  f4:	0e 94 36 00 	call	0x6c	; 0x6c <I2C_init>
-	
+  de:	0e 94 36 00 	call	0x6c	; 0x6c <I2C_init>
     /* Replace with your application code */
-    while (1) 
+	while (1) 
     {
 		I2C_masterStartWrite(SLAVE_ADD);
-  f8:	80 e1       	ldi	r24, 0x10	; 16
-  fa:	0e 94 3c 00 	call	0x78	; 0x78 <I2C_masterStartWrite>
+  e2:	80 e1       	ldi	r24, 0x10	; 16
+  e4:	0e 94 3c 00 	call	0x78	; 0x78 <I2C_masterStartWrite>
 		I2C_masterSendData(u8_send);
-  fe:	80 e0       	ldi	r24, 0x00	; 0
- 100:	0e 94 50 00 	call	0xa0	; 0xa0 <I2C_masterSendData>
+  e8:	86 e8       	ldi	r24, 0x86	; 134
+  ea:	0e 94 55 00 	call	0xaa	; 0xaa <I2C_masterSendData>
 		I2C_stop();
- 104:	0e 94 5b 00 	call	0xb6	; 0xb6 <I2C_stop>
-		msdelay(1000);
- 108:	88 ee       	ldi	r24, 0xE8	; 232
- 10a:	93 e0       	ldi	r25, 0x03	; 3
- 10c:	0e 94 61 00 	call	0xc2	; 0xc2 <msdelay>
- 110:	f3 cf       	rjmp	.-26     	; 0xf8 <main+0x4>
+  ee:	0e 94 69 00 	call	0xd2	; 0xd2 <I2C_stop>
+  f2:	f7 cf       	rjmp	.-18     	; 0xe2 <main+0x4>
 
-00000112 <_exit>:
- 112:	f8 94       	cli
+000000f4 <_exit>:
+  f4:	f8 94       	cli
 
-00000114 <__stop_program>:
- 114:	ff cf       	rjmp	.-2      	; 0x114 <__stop_program>
+000000f6 <__stop_program>:
+  f6:	ff cf       	rjmp	.-2      	; 0xf6 <__stop_program>

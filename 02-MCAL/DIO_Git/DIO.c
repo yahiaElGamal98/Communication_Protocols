@@ -13,7 +13,7 @@ void DIO_init(ST_DIO_config_t* configurations)
 {
 	switch(configurations->PORT)
 	{
-		case 'A':
+		case PORT_A:
 			if(OUTPUT==configurations->DDRx) //set bit high if OUTPUT
 			{
 				PORTA_DIR|=HIGH<<configurations->Px;
@@ -23,7 +23,7 @@ void DIO_init(ST_DIO_config_t* configurations)
 				PORTA_DIR&=~(HIGH<<configurations->Px);
 			}
 			break;
-		case 'B':
+		case PORT_B:
 			if(OUTPUT==configurations->DDRx)
 			{
 				PORTB_DIR|=HIGH<<configurations->Px;
@@ -33,7 +33,7 @@ void DIO_init(ST_DIO_config_t* configurations)
 				PORTB_DIR&=~(HIGH<<configurations->Px);
 			}
 			break;
-		case 'C':
+		case PORT_C:
 			if(OUTPUT==configurations->DDRx)
 			{
 				PORTC_DIR|=HIGH<<configurations->Px;
@@ -43,7 +43,7 @@ void DIO_init(ST_DIO_config_t* configurations)
 				PORTC_DIR&=~(HIGH<<configurations->Px);
 			}
 			break;
-		case 'D':
+		case PORT_D:
 			if(OUTPUT==configurations->DDRx)
 			{
 				PORTD_DIR|=HIGH<<configurations->Px;
@@ -60,20 +60,31 @@ void DIO_init(ST_DIO_config_t* configurations)
 }
 void DIO_port(uint8_t port, uint8_t data)
 {
-	EN_pins EN_counter;
-	uint8_t u8_pinData;
-	for(EN_counter=P0;EN_counter<=P7;EN_counter++)
+	switch(port)
 	{
-		u8_pinData=((data&(HIGH<<EN_counter))>>EN_counter);
-		DIO_write(port,EN_counter,u8_pinData);
+		case PORT_A:
+		PORTA_DATA=data;
+		break;
+		case PORT_B:
+		PORTB_DATA=data;
+		break;
+		case PORT_C:
+		PORTC_DATA=data;
+		break;
+		case PORT_D:
+		PORTD_DATA=data;
+		break;
+		default:
+		break; //invalid config
 	}
+	
 }
 
 void DIO_write(uint8_t port, EN_pins pin, uint8_t data)
 {
 	switch(port)
 	{
-		case 'A':
+		case PORT_A:
 		if(HIGH==data)
 		{
 			PORTA_DATA|=HIGH<<pin;	//Set bit if data is high
@@ -83,7 +94,7 @@ void DIO_write(uint8_t port, EN_pins pin, uint8_t data)
 			PORTA_DATA&=~(HIGH<<pin);	//Clear bit if data is low
 		}
 		break;
-		case 'B':
+		case PORT_B:
 		if(HIGH==data)
 		{
 			PORTB_DATA|=HIGH<<pin;
@@ -93,7 +104,7 @@ void DIO_write(uint8_t port, EN_pins pin, uint8_t data)
 			PORTB_DATA&=~(HIGH<<pin);
 		}
 		break;
-		case 'C':
+		case PORT_C:
 		if(HIGH==data)
 		{
 			PORTC_DATA|=HIGH<<pin;
@@ -103,7 +114,7 @@ void DIO_write(uint8_t port, EN_pins pin, uint8_t data)
 			PORTC_DATA&=~(HIGH<<pin);
 		}
 		break;
-		case 'D':
+		case PORT_D:
 		if(HIGH==data)
 		{
 			PORTD_DATA|=HIGH<<pin;
@@ -121,16 +132,16 @@ void DIO_read(uint8_t port, EN_pins pin, uint8_t *data)
 {
 	switch(port)
 	{
-		case 'A':
+		case PORT_A:
 		*data=(PORTA_STATUS&(HIGH<<pin))>>pin;	//place bit in data
 		break;
-		case 'B':
+		case PORT_B:
 		*data=((PORTB_STATUS&(HIGH<<pin))>>pin);
 		break;
-		case 'C':
+		case PORT_C:
 		*data=(PORTC_STATUS&(HIGH<<pin))>>pin;
 		break;
-		case 'D':
+		case PORT_D:
 		*data=(PORTD_STATUS&(HIGH<<pin))>>pin;
 		break;
 		default:
@@ -141,16 +152,16 @@ void DIO_toggle(uint8_t port, EN_pins pin)
 {
 	switch(port)
 	{
-		case 'A':
+		case PORT_A:
 		PORTA_DATA=PORTA_DATA^(HIGH<<pin);
 		break;
-		case 'B':
+		case PORT_B:
 		PORTB_DATA=PORTB_DATA^(HIGH<<pin);
 		break;
-		case 'C':
+		case PORT_C:
 		PORTC_DATA=PORTC_DATA^(HIGH<<pin);		
 		break;
-		case 'D':
+		case PORT_D:
 		PORTD_DATA=PORTD_DATA^(HIGH<<pin);
 		break;
 		default:
