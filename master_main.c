@@ -13,7 +13,6 @@
 
 #define EEPROM_ADDR (0xA0)
 
-#define DATA_ADDR (0x1000)
 #define FOUND 0
 
 
@@ -21,11 +20,11 @@ int main(void)
 {
 	uint8_t u8_send;
 	uint8_t u8_retData;
-	uint8_t au8_address[6];
+	uint8_t au8_address[7];
 	uint16_t u16_address;
-	uint8_t au8_command[10];
+	uint8_t au8_command[6];
 	TERMINAL_init();
-	EEPROM_init(EEPROM_ADDR);
+	EEPROM_init();
     /* Replace with your application code */
 	while (1) 
     {

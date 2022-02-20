@@ -10,7 +10,7 @@
 
 #define BYTE_SIZE 8
 
-void EEPROM_init(uint8_t SLA)
+void EEPROM_init()
 {
 	I2C_init();
 }
