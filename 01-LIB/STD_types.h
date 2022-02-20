@@ -1,6 +1,11 @@
 #ifndef _STD_TYPES_H_
 #define _STD_TYPES_H_
 
+typedef enum
+{
+	E_NOK,
+	E_OK
+}EN_ErrorStatus_t;
 
 typedef unsigned				char		uint8_t;
 typedef unsigned short			int 		uint16_t;

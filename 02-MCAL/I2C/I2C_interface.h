@@ -58,11 +58,7 @@
 #define HIGH 1
 #define LOW 0
 
-typedef enum 
-{
-	E_NOK,
-	E_OK
-	}EN_ErrorStatus_t;
+
 
 void I2C_init(void);
 EN_ErrorStatus_t I2C_masterStartRead(uint8_t SLA);

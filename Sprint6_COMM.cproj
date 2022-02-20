@@ -141,6 +141,27 @@
     <Compile Include="02-MCAL\I2C\I2C_interface.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="02-MCAL\UART\UART.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\UART\UART_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="02-MCAL\UART\UART_interface.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="03-HAL\EEPROM\EEPROM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="03-HAL\EEPROM\EEPROM.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="03-HAL\Terminal\Terminal.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="03-HAL\Terminal\Terminal.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="master_main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -151,6 +172,10 @@
     <Folder Include="02-MCAL\" />
     <Folder Include="02-MCAL\DIO_Git\" />
     <Folder Include="02-MCAL\I2C\" />
+    <Folder Include="02-MCAL\UART\" />
+    <Folder Include="03-HAL\" />
+    <Folder Include="03-HAL\EEPROM\" />
+    <Folder Include="03-HAL\Terminal\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

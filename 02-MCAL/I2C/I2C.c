@@ -126,7 +126,7 @@ EN_ErrorStatus_t I2C_masterReceiveDataNAck(uint8_t * u8_data)
 void I2C_stop()
 {
 	TWCR=(HIGH<<TWINT) | (HIGH<<TWSTO) |(HIGH<<TWEN);
-	while(LOW==((TWCR&(HIGH<<TWSTO))>>TWSTO));
+	//while(LOW==((TWCR&(HIGH<<TWSTO))>>TWSTO));
 }
 EN_ErrorStatus_t I2C_masterRepeatedStartRead(uint8_t u8_SLA)
 {

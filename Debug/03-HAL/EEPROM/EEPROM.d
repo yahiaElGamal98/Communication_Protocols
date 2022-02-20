@@ -1,0 +1,10 @@
+03-HAL/EEPROM/EEPROM.d 03-HAL/EEPROM/EEPROM.o: ../03-HAL/EEPROM/EEPROM.c \
+ ../03-HAL/EEPROM/../../01-LIB/STD_types.h \
+ ../03-HAL/EEPROM/../../02-MCAL/I2C/I2C_interface.h \
+ ../03-HAL/EEPROM/EEPROM.h
+
+../03-HAL/EEPROM/../../01-LIB/STD_types.h:
+
+../03-HAL/EEPROM/../../02-MCAL/I2C/I2C_interface.h:
+
+../03-HAL/EEPROM/EEPROM.h:
