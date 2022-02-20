@@ -39,9 +39,16 @@ int main(void)
 			TERMINAL_read(au8_address);
 			TERMINAL_newLine();
 			u16_address=atoi(au8_address);
-			TERMINAL_write("OK");
-			TERMINAL_newLine();
-			EEPROM_read(EEPROM_ADDR,u16_address,&u8_retData);
+			if(E_NOK==EEPROM_read(EEPROM_ADDR,u16_address,&u8_retData))
+			{
+				TERMINAL_write("NOK");
+				TERMINAL_newLine();
+			}
+			else
+			{
+				TERMINAL_write("OK");
+				TERMINAL_newLine();
+			}
 			TERMINAL_write("DATA Returned is : ");
 			TERMINAL_writeChar(u8_retData);
 			TERMINAL_newLine();
@@ -59,9 +66,16 @@ int main(void)
 			TERMINAL_write("Enter Data : ");
 			TERMINAL_readChar(&u8_send);
 			TERMINAL_newLine();
-			EEPROM_write(EEPROM_ADDR,u16_address,u8_send);
-			TERMINAL_write("OK,Done");
-			TERMINAL_newLine();
+			if(E_NOK==EEPROM_write(EEPROM_ADDR,u16_address,u8_send))
+			{
+				TERMINAL_write("NOK");
+				TERMINAL_newLine();
+			}
+			else
+			{
+				TERMINAL_write("OK");
+				TERMINAL_newLine();
+			}
 		}
     }
 }

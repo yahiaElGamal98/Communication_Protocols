@@ -3,31 +3,31 @@ Sprint6_COMM.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000456  00000000  00000000  00000094  2**1
+  0 .text         00000478  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000088  00800060  00000456  000004ea  2**0
+  1 .data         00000080  00800060  00000478  0000050c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000002  008000e8  008000e8  00000572  2**0
+  2 .bss          00000002  008000e0  008000e0  0000058c  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000572  2**0
+  3 .comment      00000030  00000000  00000000  0000058c  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000005a4  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000005bc  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000168  00000000  00000000  000005e0  2**0
+  5 .debug_aranges 00000168  00000000  00000000  000005f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001272  00000000  00000000  00000748  2**0
+  6 .debug_info   000012ca  00000000  00000000  00000760  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000008f7  00000000  00000000  000019ba  2**0
+  7 .debug_abbrev 0000090f  00000000  00000000  00001a2a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000a8e  00000000  00000000  000022b1  2**0
+  8 .debug_line   00000aa6  00000000  00000000  00002339  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000002f4  00000000  00000000  00002d40  2**2
+  9 .debug_frame  000002f4  00000000  00000000  00002de0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000620  00000000  00000000  00003034  2**0
+ 10 .debug_str    00000620  00000000  00000000  000030d4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000756  00000000  00000000  00003654  2**0
+ 11 .debug_loc    00000766  00000000  00000000  000036f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000118  00000000  00000000  00003daa  2**0
+ 12 .debug_ranges 00000118  00000000  00000000  00003e5a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,18 +67,18 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e6 e5       	ldi	r30, 0x56	; 86
+  66:	e8 e7       	ldi	r30, 0x78	; 120
   68:	f4 e0       	ldi	r31, 0x04	; 4
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
-  70:	a8 3e       	cpi	r26, 0xE8	; 232
+  70:	a0 3e       	cpi	r26, 0xE0	; 224
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
 
 00000076 <__do_clear_bss>:
   76:	20 e0       	ldi	r18, 0x00	; 0
-  78:	a8 ee       	ldi	r26, 0xE8	; 232
+  78:	a0 ee       	ldi	r26, 0xE0	; 224
   7a:	b0 e0       	ldi	r27, 0x00	; 0
   7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
 
@@ -86,11 +86,11 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	aa 3e       	cpi	r26, 0xEA	; 234
+  80:	a2 3e       	cpi	r26, 0xE2	; 226
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
   86:	0e 94 74 01 	call	0x2e8	; 0x2e8 <main>
-  8a:	0c 94 29 02 	jmp	0x452	; 0x452 <_exit>
+  8a:	0c 94 3a 02 	jmp	0x474	; 0x474 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -304,8 +304,8 @@ uint8_t UART_returnRxStatus(void)
  17a:	bf 93       	push	r27
  17c:	ef 93       	push	r30
  17e:	ff 93       	push	r31
- 180:	e0 91 e8 00 	lds	r30, 0x00E8	; 0x8000e8 <__data_end>
- 184:	f0 91 e9 00 	lds	r31, 0x00E9	; 0x8000e9 <__data_end+0x1>
+ 180:	e0 91 e0 00 	lds	r30, 0x00E0	; 0x8000e0 <__data_end>
+ 184:	f0 91 e1 00 	lds	r31, 0x00E1	; 0x8000e1 <__data_end+0x1>
  188:	09 95       	icall
  18a:	ff 91       	pop	r31
  18c:	ef 91       	pop	r30
@@ -641,18 +641,18 @@ int main(void)
  31a:	70 e0       	ldi	r23, 0x00	; 0
  31c:	ce 01       	movw	r24, r28
  31e:	0a 96       	adiw	r24, 0x0a	; 10
- 320:	0e 94 18 02 	call	0x430	; 0x430 <strcmp>
+ 320:	0e 94 29 02 	call	0x452	; 0x452 <strcmp>
  324:	89 2b       	or	r24, r25
- 326:	61 f5       	brne	.+88     	; 0x380 <main+0x98>
+ 326:	a1 f5       	brne	.+104    	; 0x390 <main+0xa8>
 		{
 			TERMINAL_write("OK");
- 328:	87 e8       	ldi	r24, 0x87	; 135
+ 328:	8e e9       	ldi	r24, 0x9E	; 158
  32a:	90 e0       	ldi	r25, 0x00	; 0
  32c:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_newLine();
  330:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
 			TERMINAL_write("Enter read address : ");
- 334:	8a e8       	ldi	r24, 0x8A	; 138
+ 334:	87 e8       	ldi	r24, 0x87	; 135
  336:	90 e0       	ldi	r25, 0x00	; 0
  338:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_read(au8_address);
@@ -664,146 +664,172 @@ int main(void)
 			u16_address=atoi(au8_address);
  348:	ce 01       	movw	r24, r28
  34a:	03 96       	adiw	r24, 0x03	; 3
- 34c:	0e 94 fa 01 	call	0x3f4	; 0x3f4 <atoi>
- 350:	8c 01       	movw	r16, r24
-			TERMINAL_write("OK");
- 352:	87 e8       	ldi	r24, 0x87	; 135
- 354:	90 e0       	ldi	r25, 0x00	; 0
- 356:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
-			TERMINAL_newLine();
- 35a:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
-			EEPROM_read(EEPROM_ADDR,u16_address,&u8_retData);
- 35e:	ae 01       	movw	r20, r28
- 360:	4e 5f       	subi	r20, 0xFE	; 254
- 362:	5f 4f       	sbci	r21, 0xFF	; 255
- 364:	b8 01       	movw	r22, r16
- 366:	80 ea       	ldi	r24, 0xA0	; 160
- 368:	0e 94 24 01 	call	0x248	; 0x248 <EEPROM_read>
+ 34c:	0e 94 0b 02 	call	0x416	; 0x416 <atoi>
+			if(E_NOK==EEPROM_read(EEPROM_ADDR,u16_address,&u8_retData))
+ 350:	ae 01       	movw	r20, r28
+ 352:	4e 5f       	subi	r20, 0xFE	; 254
+ 354:	5f 4f       	sbci	r21, 0xFF	; 255
+ 356:	bc 01       	movw	r22, r24
+ 358:	80 ea       	ldi	r24, 0xA0	; 160
+ 35a:	0e 94 24 01 	call	0x248	; 0x248 <EEPROM_read>
+ 35e:	81 11       	cpse	r24, r1
+ 360:	07 c0       	rjmp	.+14     	; 0x370 <main+0x88>
+			{
+				TERMINAL_write("NOK");
+ 362:	8d e9       	ldi	r24, 0x9D	; 157
+ 364:	90 e0       	ldi	r25, 0x00	; 0
+ 366:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+				TERMINAL_newLine();
+ 36a:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 36e:	06 c0       	rjmp	.+12     	; 0x37c <main+0x94>
+			}
+			else
+			{
+				TERMINAL_write("OK");
+ 370:	8e e9       	ldi	r24, 0x9E	; 158
+ 372:	90 e0       	ldi	r25, 0x00	; 0
+ 374:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+				TERMINAL_newLine();
+ 378:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+			}
 			TERMINAL_write("DATA Returned is : ");
- 36c:	80 ea       	ldi	r24, 0xA0	; 160
- 36e:	90 e0       	ldi	r25, 0x00	; 0
- 370:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+ 37c:	81 ea       	ldi	r24, 0xA1	; 161
+ 37e:	90 e0       	ldi	r25, 0x00	; 0
+ 380:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_writeChar(u8_retData);
- 374:	8a 81       	ldd	r24, Y+2	; 0x02
- 376:	0e 94 67 01 	call	0x2ce	; 0x2ce <TERMINAL_writeChar>
+ 384:	8a 81       	ldd	r24, Y+2	; 0x02
+ 386:	0e 94 67 01 	call	0x2ce	; 0x2ce <TERMINAL_writeChar>
 			TERMINAL_newLine();
- 37a:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
- 37e:	c2 cf       	rjmp	.-124    	; 0x304 <main+0x1c>
+ 38a:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 38e:	ba cf       	rjmp	.-140    	; 0x304 <main+0x1c>
 		}
 		else if (FOUND==strcmp(au8_command,"WRITE"))
- 380:	64 eb       	ldi	r22, 0xB4	; 180
- 382:	70 e0       	ldi	r23, 0x00	; 0
- 384:	ce 01       	movw	r24, r28
- 386:	0a 96       	adiw	r24, 0x0a	; 10
- 388:	0e 94 18 02 	call	0x430	; 0x430 <strcmp>
- 38c:	89 2b       	or	r24, r25
- 38e:	09 f0       	breq	.+2      	; 0x392 <main+0xaa>
- 390:	b9 cf       	rjmp	.-142    	; 0x304 <main+0x1c>
+ 390:	65 eb       	ldi	r22, 0xB5	; 181
+ 392:	70 e0       	ldi	r23, 0x00	; 0
+ 394:	ce 01       	movw	r24, r28
+ 396:	0a 96       	adiw	r24, 0x0a	; 10
+ 398:	0e 94 29 02 	call	0x452	; 0x452 <strcmp>
+ 39c:	89 2b       	or	r24, r25
+ 39e:	09 f0       	breq	.+2      	; 0x3a2 <main+0xba>
+ 3a0:	b1 cf       	rjmp	.-158    	; 0x304 <main+0x1c>
 		{
 			TERMINAL_write("OK");
- 392:	87 e8       	ldi	r24, 0x87	; 135
- 394:	90 e0       	ldi	r25, 0x00	; 0
- 396:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+ 3a2:	8e e9       	ldi	r24, 0x9E	; 158
+ 3a4:	90 e0       	ldi	r25, 0x00	; 0
+ 3a6:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_newLine();
- 39a:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 3aa:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
 			TERMINAL_write("Enter write address : ");
- 39e:	8a eb       	ldi	r24, 0xBA	; 186
- 3a0:	90 e0       	ldi	r25, 0x00	; 0
- 3a2:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+ 3ae:	8b eb       	ldi	r24, 0xBB	; 187
+ 3b0:	90 e0       	ldi	r25, 0x00	; 0
+ 3b2:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_read(au8_address);
- 3a6:	ce 01       	movw	r24, r28
- 3a8:	03 96       	adiw	r24, 0x03	; 3
- 3aa:	0e 94 61 01 	call	0x2c2	; 0x2c2 <TERMINAL_read>
+ 3b6:	ce 01       	movw	r24, r28
+ 3b8:	03 96       	adiw	r24, 0x03	; 3
+ 3ba:	0e 94 61 01 	call	0x2c2	; 0x2c2 <TERMINAL_read>
 			TERMINAL_newLine();
- 3ae:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 3be:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
 			u16_address=atoi(au8_address);
- 3b2:	ce 01       	movw	r24, r28
- 3b4:	03 96       	adiw	r24, 0x03	; 3
- 3b6:	0e 94 fa 01 	call	0x3f4	; 0x3f4 <atoi>
- 3ba:	8c 01       	movw	r16, r24
+ 3c2:	ce 01       	movw	r24, r28
+ 3c4:	03 96       	adiw	r24, 0x03	; 3
+ 3c6:	0e 94 0b 02 	call	0x416	; 0x416 <atoi>
+ 3ca:	8c 01       	movw	r16, r24
 			TERMINAL_write("OK");
- 3bc:	87 e8       	ldi	r24, 0x87	; 135
- 3be:	90 e0       	ldi	r25, 0x00	; 0
- 3c0:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+ 3cc:	8e e9       	ldi	r24, 0x9E	; 158
+ 3ce:	90 e0       	ldi	r25, 0x00	; 0
+ 3d0:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_newLine();
- 3c4:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 3d4:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
 			TERMINAL_write("Enter Data : ");
- 3c8:	81 ed       	ldi	r24, 0xD1	; 209
- 3ca:	90 e0       	ldi	r25, 0x00	; 0
- 3cc:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+ 3d8:	82 ed       	ldi	r24, 0xD2	; 210
+ 3da:	90 e0       	ldi	r25, 0x00	; 0
+ 3dc:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
 			TERMINAL_readChar(&u8_send);
- 3d0:	ce 01       	movw	r24, r28
- 3d2:	01 96       	adiw	r24, 0x01	; 1
- 3d4:	0e 94 6a 01 	call	0x2d4	; 0x2d4 <TERMINAL_readChar>
+ 3e0:	ce 01       	movw	r24, r28
+ 3e2:	01 96       	adiw	r24, 0x01	; 1
+ 3e4:	0e 94 6a 01 	call	0x2d4	; 0x2d4 <TERMINAL_readChar>
 			TERMINAL_newLine();
- 3d8:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
-			EEPROM_write(EEPROM_ADDR,u16_address,u8_send);
- 3dc:	49 81       	ldd	r20, Y+1	; 0x01
- 3de:	b8 01       	movw	r22, r16
- 3e0:	80 ea       	ldi	r24, 0xA0	; 160
- 3e2:	0e 94 45 01 	call	0x28a	; 0x28a <EEPROM_write>
-			TERMINAL_write("OK,Done");
- 3e6:	8f ed       	ldi	r24, 0xDF	; 223
- 3e8:	90 e0       	ldi	r25, 0x00	; 0
- 3ea:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
-			TERMINAL_newLine();
- 3ee:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
- 3f2:	88 cf       	rjmp	.-240    	; 0x304 <main+0x1c>
+ 3e8:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+			if(E_NOK==EEPROM_write(EEPROM_ADDR,u16_address,u8_send))
+ 3ec:	49 81       	ldd	r20, Y+1	; 0x01
+ 3ee:	b8 01       	movw	r22, r16
+ 3f0:	80 ea       	ldi	r24, 0xA0	; 160
+ 3f2:	0e 94 45 01 	call	0x28a	; 0x28a <EEPROM_write>
+ 3f6:	81 11       	cpse	r24, r1
+ 3f8:	07 c0       	rjmp	.+14     	; 0x408 <__EEPROM_REGION_LENGTH__+0x8>
+			{
+				TERMINAL_write("NOK");
+ 3fa:	8d e9       	ldi	r24, 0x9D	; 157
+ 3fc:	90 e0       	ldi	r25, 0x00	; 0
+ 3fe:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+				TERMINAL_newLine();
+ 402:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 406:	7e cf       	rjmp	.-260    	; 0x304 <main+0x1c>
+			}
+			else
+			{
+				TERMINAL_write("OK");
+ 408:	8e e9       	ldi	r24, 0x9E	; 158
+ 40a:	90 e0       	ldi	r25, 0x00	; 0
+ 40c:	0e 94 64 01 	call	0x2c8	; 0x2c8 <TERMINAL_write>
+				TERMINAL_newLine();
+ 410:	0e 94 6d 01 	call	0x2da	; 0x2da <TERMINAL_newLine>
+ 414:	77 cf       	rjmp	.-274    	; 0x304 <main+0x1c>
 
-000003f4 <atoi>:
- 3f4:	fc 01       	movw	r30, r24
- 3f6:	88 27       	eor	r24, r24
- 3f8:	99 27       	eor	r25, r25
- 3fa:	e8 94       	clt
- 3fc:	21 91       	ld	r18, Z+
- 3fe:	20 32       	cpi	r18, 0x20	; 32
- 400:	e9 f3       	breq	.-6      	; 0x3fc <atoi+0x8>
- 402:	29 30       	cpi	r18, 0x09	; 9
- 404:	10 f0       	brcs	.+4      	; 0x40a <__EEPROM_REGION_LENGTH__+0xa>
- 406:	2e 30       	cpi	r18, 0x0E	; 14
- 408:	c8 f3       	brcs	.-14     	; 0x3fc <atoi+0x8>
- 40a:	2b 32       	cpi	r18, 0x2B	; 43
- 40c:	41 f0       	breq	.+16     	; 0x41e <__EEPROM_REGION_LENGTH__+0x1e>
- 40e:	2d 32       	cpi	r18, 0x2D	; 45
- 410:	39 f4       	brne	.+14     	; 0x420 <__EEPROM_REGION_LENGTH__+0x20>
- 412:	68 94       	set
- 414:	04 c0       	rjmp	.+8      	; 0x41e <__EEPROM_REGION_LENGTH__+0x1e>
- 416:	0e 94 21 02 	call	0x442	; 0x442 <__mulhi_const_10>
- 41a:	82 0f       	add	r24, r18
- 41c:	91 1d       	adc	r25, r1
+00000416 <atoi>:
+ 416:	fc 01       	movw	r30, r24
+ 418:	88 27       	eor	r24, r24
+ 41a:	99 27       	eor	r25, r25
+ 41c:	e8 94       	clt
  41e:	21 91       	ld	r18, Z+
- 420:	20 53       	subi	r18, 0x30	; 48
- 422:	2a 30       	cpi	r18, 0x0A	; 10
- 424:	c0 f3       	brcs	.-16     	; 0x416 <__EEPROM_REGION_LENGTH__+0x16>
- 426:	1e f4       	brtc	.+6      	; 0x42e <__EEPROM_REGION_LENGTH__+0x2e>
- 428:	90 95       	com	r25
- 42a:	81 95       	neg	r24
- 42c:	9f 4f       	sbci	r25, 0xFF	; 255
- 42e:	08 95       	ret
-
-00000430 <strcmp>:
- 430:	fb 01       	movw	r30, r22
- 432:	dc 01       	movw	r26, r24
- 434:	8d 91       	ld	r24, X+
- 436:	01 90       	ld	r0, Z+
- 438:	80 19       	sub	r24, r0
- 43a:	01 10       	cpse	r0, r1
- 43c:	d9 f3       	breq	.-10     	; 0x434 <strcmp+0x4>
- 43e:	99 0b       	sbc	r25, r25
- 440:	08 95       	ret
-
-00000442 <__mulhi_const_10>:
- 442:	7a e0       	ldi	r23, 0x0A	; 10
- 444:	97 9f       	mul	r25, r23
- 446:	90 2d       	mov	r25, r0
- 448:	87 9f       	mul	r24, r23
- 44a:	80 2d       	mov	r24, r0
- 44c:	91 0d       	add	r25, r1
- 44e:	11 24       	eor	r1, r1
+ 420:	20 32       	cpi	r18, 0x20	; 32
+ 422:	e9 f3       	breq	.-6      	; 0x41e <atoi+0x8>
+ 424:	29 30       	cpi	r18, 0x09	; 9
+ 426:	10 f0       	brcs	.+4      	; 0x42c <atoi+0x16>
+ 428:	2e 30       	cpi	r18, 0x0E	; 14
+ 42a:	c8 f3       	brcs	.-14     	; 0x41e <atoi+0x8>
+ 42c:	2b 32       	cpi	r18, 0x2B	; 43
+ 42e:	41 f0       	breq	.+16     	; 0x440 <atoi+0x2a>
+ 430:	2d 32       	cpi	r18, 0x2D	; 45
+ 432:	39 f4       	brne	.+14     	; 0x442 <atoi+0x2c>
+ 434:	68 94       	set
+ 436:	04 c0       	rjmp	.+8      	; 0x440 <atoi+0x2a>
+ 438:	0e 94 32 02 	call	0x464	; 0x464 <__mulhi_const_10>
+ 43c:	82 0f       	add	r24, r18
+ 43e:	91 1d       	adc	r25, r1
+ 440:	21 91       	ld	r18, Z+
+ 442:	20 53       	subi	r18, 0x30	; 48
+ 444:	2a 30       	cpi	r18, 0x0A	; 10
+ 446:	c0 f3       	brcs	.-16     	; 0x438 <atoi+0x22>
+ 448:	1e f4       	brtc	.+6      	; 0x450 <atoi+0x3a>
+ 44a:	90 95       	com	r25
+ 44c:	81 95       	neg	r24
+ 44e:	9f 4f       	sbci	r25, 0xFF	; 255
  450:	08 95       	ret
 
-00000452 <_exit>:
- 452:	f8 94       	cli
+00000452 <strcmp>:
+ 452:	fb 01       	movw	r30, r22
+ 454:	dc 01       	movw	r26, r24
+ 456:	8d 91       	ld	r24, X+
+ 458:	01 90       	ld	r0, Z+
+ 45a:	80 19       	sub	r24, r0
+ 45c:	01 10       	cpse	r0, r1
+ 45e:	d9 f3       	breq	.-10     	; 0x456 <strcmp+0x4>
+ 460:	99 0b       	sbc	r25, r25
+ 462:	08 95       	ret
 
-00000454 <__stop_program>:
- 454:	ff cf       	rjmp	.-2      	; 0x454 <__stop_program>
+00000464 <__mulhi_const_10>:
+ 464:	7a e0       	ldi	r23, 0x0A	; 10
+ 466:	97 9f       	mul	r25, r23
+ 468:	90 2d       	mov	r25, r0
+ 46a:	87 9f       	mul	r24, r23
+ 46c:	80 2d       	mov	r24, r0
+ 46e:	91 0d       	add	r25, r1
+ 470:	11 24       	eor	r1, r1
+ 472:	08 95       	ret
+
+00000474 <_exit>:
+ 474:	f8 94       	cli
+
+00000476 <__stop_program>:
+ 476:	ff cf       	rjmp	.-2      	; 0x476 <__stop_program>
