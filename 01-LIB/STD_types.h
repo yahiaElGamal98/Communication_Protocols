@@ -1,6 +1,12 @@
 #ifndef _STD_TYPES_H_
 #define _STD_TYPES_H_
 
+#define HIGH 1
+#define LOW 0
+
+#define NULL '\0' 
+
+#define NULL_PTR 0
 
 typedef unsigned				char		uint8_t;
 typedef unsigned short			int 		uint16_t;

@@ -42,7 +42,8 @@
 /*UBRR Register shift helper*/
 #define REG_SIZE 8
 
-void static (*RxCompleteCallback)(void);
+
+
 void UART_init(void);
 void setRxCompleteCallback(void (*callback)(void));
 void UART_sendChar(uint8_t u8_char);

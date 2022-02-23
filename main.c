@@ -6,7 +6,6 @@
  */ 
 
 #include "./01-LIB/STD_types.h"
-#include "./01-LIB/Registers.h"
 #include "./03-HAL/LED/LED.h"
 #include "./02-MCAL/UART/UART_interface.h"
 #include <string.h>
@@ -21,42 +20,41 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
-		UART_sendString("ENTER A COMMAND : ");
+		UART_sendString((uint8_t*)("ENTER A COMMAND : "));
 		UART_receiveString(u8_val);
 		UART_sendString(u8_val);
-		if(strcmp(u8_val,"START")==0)
+		if(strcmp((const char*)u8_val,(const char*)("START"))==0)
 		{
 			LED_ON(LED0);
 			LED_OFF(LED1);
 			LED_OFF(LED2);
 			UART_sendChar('\n');
 			UART_sendChar('\r');
-			UART_sendString("LED 0 IS ON");
-			
+			UART_sendString((uint8_t*)("LED 0 IS ON"));	
 		}
-		else if(strcmp(u8_val,"WAIT")==0)
+		else if(strcmp((const char *)u8_val,"WAIT")==0)
 		{
 			LED_ON(LED1);
 			LED_OFF(LED0);
 			LED_OFF(LED2);
 			UART_sendChar('\n');
 			UART_sendChar('\r');
-			UART_sendString("LED 1 IS ON");
+			UART_sendString((uint8_t*)"LED 1 IS ON");
 		}
-		else if(strcmp(u8_val,"STOP")==0)
+		else if(strcmp((const char *)u8_val,"STOP")==0)
 		{
 			LED_ON(LED2);
 			LED_OFF(LED1);
 			LED_OFF(LED0);
 			UART_sendChar('\n');
 			UART_sendChar('\r');
-			UART_sendString("LED 2 IS ON");
+			UART_sendString((uint8_t*)"LED 2 IS ON");
 		}
-		else if(strcmp(u8_val,"AT")==0)
+		else if(strcmp((const char *)u8_val,"AT")==0)
 		{
 			UART_sendChar('\n');
 			UART_sendChar('\r');
-			UART_sendString("OK");
+			UART_sendString((uint8_t*)"OK");
 		}
 		else
 		{
