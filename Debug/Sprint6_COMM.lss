@@ -3,31 +3,31 @@ Sprint6_COMM.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000580  00000000  00000000  00000094  2**1
+  0 .text         000005aa  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000005a  00800060  00000580  00000614  2**0
+  1 .data         0000005a  00800060  000005aa  0000063e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000002  008000ba  008000ba  0000066e  2**0
+  2 .bss          00000002  008000ba  008000ba  00000698  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000066e  2**0
+  3 .comment      00000030  00000000  00000000  00000698  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000006a0  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000006c8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000e0  00000000  00000000  000006dc  2**0
+  5 .debug_aranges 000000e0  00000000  00000000  00000704  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001105  00000000  00000000  000007bc  2**0
+  6 .debug_info   00001198  00000000  00000000  000007e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000008bf  00000000  00000000  000018c1  2**0
+  7 .debug_abbrev 00000934  00000000  00000000  0000197c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000007bd  00000000  00000000  00002180  2**0
+  8 .debug_line   000007ee  00000000  00000000  000022b0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000001e8  00000000  00000000  00002940  2**2
+  9 .debug_frame  000001e8  00000000  00000000  00002aa0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004d7  00000000  00000000  00002b28  2**0
+ 10 .debug_str    00000500  00000000  00000000  00002c88  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000689  00000000  00000000  00002fff  2**0
+ 11 .debug_loc    00000748  00000000  00000000  00003188  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000a0  00000000  00000000  00003688  2**0
+ 12 .debug_ranges 000000d0  00000000  00000000  000038d0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,7 +67,7 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e0 e8       	ldi	r30, 0x80	; 128
+  66:	ea ea       	ldi	r30, 0xAA	; 170
   68:	f5 e0       	ldi	r31, 0x05	; 5
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
@@ -89,8 +89,8 @@ Disassembly of section .text:
   80:	ac 3b       	cpi	r26, 0xBC	; 188
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
-  86:	0e 94 1c 02 	call	0x438	; 0x438 <main>
-  8a:	0c 94 be 02 	jmp	0x57c	; 0x57c <_exit>
+  86:	0e 94 31 02 	call	0x462	; 0x462 <main>
+  8a:	0c 94 d3 02 	jmp	0x5a6	; 0x5a6 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -487,477 +487,563 @@ void setRxCompleteCallback(void (*callback)(void))
 
 000002d0 <UART_receiveChar>:
 }
-void UART_receiveChar(uint8_t* u8_val)
+EN_ErrorStatus_t UART_receiveChar(void* pvid_val)
 {
-	while(LOW==((UCSRA&(HIGH<<RXC))>>RXC))
- 2d0:	5f 9b       	sbis	0x0b, 7	; 11
- 2d2:	fe cf       	rjmp	.-4      	; 0x2d0 <UART_receiveChar>
+	EN_ErrorStatus_t loc_error;
+	if(NULL_PTR!=pvid_val)
+ 2d0:	00 97       	sbiw	r24, 0x00	; 0
+ 2d2:	39 f0       	breq	.+14     	; 0x2e2 <UART_receiveChar+0x12>
 	{
-		//WAIT FOR RECEIVE COMPLETE FLAG
+		while(LOW==((UCSRA&(HIGH<<RXC))>>RXC))
+ 2d4:	5f 9b       	sbis	0x0b, 7	; 11
+ 2d6:	fe cf       	rjmp	.-4      	; 0x2d4 <UART_receiveChar+0x4>
+		{
+			//WAIT FOR RECEIVE COMPLETE FLAG
+		}
+		*((uint8_t*)pvid_val)=UDR;
+ 2d8:	2c b1       	in	r18, 0x0c	; 12
+ 2da:	fc 01       	movw	r30, r24
+ 2dc:	20 83       	st	Z, r18
+		loc_error=EOK;
+ 2de:	81 e0       	ldi	r24, 0x01	; 1
+ 2e0:	08 95       	ret
 	}
-	*u8_val=UDR;
- 2d4:	2c b1       	in	r18, 0x0c	; 12
- 2d6:	fc 01       	movw	r30, r24
- 2d8:	20 83       	st	Z, r18
- 2da:	08 95       	ret
-
-000002dc <UART_sendChar>:
+	else
+	{
+		loc_error=ENOK;
+ 2e2:	80 e0       	ldi	r24, 0x00	; 0
+	}
+	return loc_error;
+	
 }
+ 2e4:	08 95       	ret
+
+000002e6 <UART_sendChar>:
 void UART_sendChar(uint8_t u8_char)
 {
 	while(LOW==((UCSRA&(HIGH<<UDRE))>>UDRE))
- 2dc:	5d 9b       	sbis	0x0b, 5	; 11
- 2de:	fe cf       	rjmp	.-4      	; 0x2dc <UART_sendChar>
+ 2e6:	5d 9b       	sbis	0x0b, 5	; 11
+ 2e8:	fe cf       	rjmp	.-4      	; 0x2e6 <UART_sendChar>
 	{
 		//WAIT FOR DATA REGISTER EMPTY FLAG
 	}
 	UDR=u8_char;
- 2e0:	8c b9       	out	0x0c, r24	; 12
- 2e2:	08 95       	ret
+ 2ea:	8c b9       	out	0x0c, r24	; 12
+ 2ec:	08 95       	ret
 
-000002e4 <UART_sendString>:
+000002ee <UART_sendString>:
 }
-void UART_sendString(uint8_t* u8_str)
+EN_ErrorStatus_t UART_sendString(const void* pvid_str)
 {
- 2e4:	0f 93       	push	r16
- 2e6:	1f 93       	push	r17
- 2e8:	cf 93       	push	r28
- 2ea:	8c 01       	movw	r16, r24
-	uint8_t u8_index=0;
- 2ec:	c0 e0       	ldi	r28, 0x00	; 0
-	//continue sending till you meet any terminating character
-	while((NULL!=u8_str[u8_index])&&(CARRIAGE_RETURN!=u8_str[u8_index])&&(NEW_LINE!=u8_str[u8_index]))
- 2ee:	03 c0       	rjmp	.+6      	; 0x2f6 <UART_sendString+0x12>
-	{
-		UART_sendChar(u8_str[u8_index]);
- 2f0:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
-		u8_index++;
- 2f4:	cf 5f       	subi	r28, 0xFF	; 255
-}
-void UART_sendString(uint8_t* u8_str)
-{
-	uint8_t u8_index=0;
-	//continue sending till you meet any terminating character
-	while((NULL!=u8_str[u8_index])&&(CARRIAGE_RETURN!=u8_str[u8_index])&&(NEW_LINE!=u8_str[u8_index]))
- 2f6:	f8 01       	movw	r30, r16
- 2f8:	ec 0f       	add	r30, r28
- 2fa:	f1 1d       	adc	r31, r1
- 2fc:	80 81       	ld	r24, Z
- 2fe:	88 23       	and	r24, r24
- 300:	21 f0       	breq	.+8      	; 0x30a <UART_sendString+0x26>
- 302:	8d 30       	cpi	r24, 0x0D	; 13
- 304:	11 f0       	breq	.+4      	; 0x30a <UART_sendString+0x26>
- 306:	8a 30       	cpi	r24, 0x0A	; 10
- 308:	99 f7       	brne	.-26     	; 0x2f0 <UART_sendString+0xc>
-	{
-		UART_sendChar(u8_str[u8_index]);
-		u8_index++;
+ 2ee:	0f 93       	push	r16
+ 2f0:	1f 93       	push	r17
+ 2f2:	cf 93       	push	r28
+	EN_ErrorStatus_t loc_error;
+	if(NULL_PTR!=pvid_str)
+ 2f4:	00 97       	sbiw	r24, 0x00	; 0
+ 2f6:	31 f4       	brne	.+12     	; 0x304 <UART_sendString+0x16>
+		}
+		loc_error=EOK;
 	}
-}
- 30a:	cf 91       	pop	r28
- 30c:	1f 91       	pop	r17
- 30e:	0f 91       	pop	r16
- 310:	08 95       	ret
-
-00000312 <UART_receiveString>:
-void UART_receiveString(uint8_t* u8_retStr)
-{
- 312:	ef 92       	push	r14
- 314:	ff 92       	push	r15
- 316:	0f 93       	push	r16
- 318:	1f 93       	push	r17
- 31a:	cf 93       	push	r28
- 31c:	7c 01       	movw	r14, r24
-	uint8_t u8_index=0;
- 31e:	c0 e0       	ldi	r28, 0x00	; 0
-	//max length of received string is 255 as per requirements
-	while(u8_index<MAX_CHAR)
- 320:	17 c0       	rjmp	.+46     	; 0x350 <UART_receiveString+0x3e>
+	else
 	{
-		UART_receiveChar(&u8_retStr[u8_index]);
- 322:	87 01       	movw	r16, r14
- 324:	0c 0f       	add	r16, r28
- 326:	11 1d       	adc	r17, r1
- 328:	c8 01       	movw	r24, r16
- 32a:	0e 94 68 01 	call	0x2d0	; 0x2d0 <UART_receiveChar>
-		//continue receiving till you meet a terminating character
-		if(NULL==u8_retStr[u8_index] ||NEW_LINE==u8_retStr[u8_index] ||CARRIAGE_RETURN==u8_retStr[u8_index])
- 32e:	f8 01       	movw	r30, r16
- 330:	80 81       	ld	r24, Z
- 332:	88 23       	and	r24, r24
- 334:	21 f0       	breq	.+8      	; 0x33e <UART_receiveString+0x2c>
- 336:	8a 30       	cpi	r24, 0x0A	; 10
- 338:	11 f0       	breq	.+4      	; 0x33e <UART_receiveString+0x2c>
- 33a:	8d 30       	cpi	r24, 0x0D	; 13
- 33c:	19 f4       	brne	.+6      	; 0x344 <UART_receiveString+0x32>
+		loc_error=ENOK;
+ 2f8:	80 e0       	ldi	r24, 0x00	; 0
+ 2fa:	15 c0       	rjmp	.+42     	; 0x326 <UART_sendString+0x38>
+		uint8_t u8_index=0;
+		uint8_t *pu8_str=(uint8_t*)pvid_str;
+		//continue sending till you meet any terminating character
+		while((NULL!=pu8_str[u8_index])&&(CARRIAGE_RETURN!=pu8_str[u8_index])&&(NEW_LINE!=pu8_str[u8_index]))
 		{
-			//replace that character with NULL
-			u8_retStr[u8_index]=NULL;
- 33e:	f8 01       	movw	r30, r16
- 340:	10 82       	st	Z, r1
-			break;
- 342:	08 c0       	rjmp	.+16     	; 0x354 <UART_receiveString+0x42>
-		}
-		//force exit and terminate with NULL if MAX SIZE reached
-		else if ((MAX_CHAR-1)==u8_index)
- 344:	ce 3f       	cpi	r28, 0xFE	; 254
- 346:	19 f4       	brne	.+6      	; 0x34e <UART_receiveString+0x3c>
-		{
-			u8_retStr[u8_index]=NULL;
- 348:	f8 01       	movw	r30, r16
- 34a:	10 82       	st	Z, r1
-			break;
- 34c:	03 c0       	rjmp	.+6      	; 0x354 <UART_receiveString+0x42>
-		}
-		else
-		{
+			UART_sendChar(pu8_str[u8_index]);
+ 2fc:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 			u8_index++;
- 34e:	cf 5f       	subi	r28, 0xFF	; 255
-}
-void UART_receiveString(uint8_t* u8_retStr)
-{
-	uint8_t u8_index=0;
-	//max length of received string is 255 as per requirements
-	while(u8_index<MAX_CHAR)
- 350:	cf 3f       	cpi	r28, 0xFF	; 255
- 352:	39 f7       	brne	.-50     	; 0x322 <UART_receiveString+0x10>
-		else
+ 300:	cf 5f       	subi	r28, 0xFF	; 255
+ 302:	02 c0       	rjmp	.+4      	; 0x308 <UART_sendString+0x1a>
+ 304:	8c 01       	movw	r16, r24
+ 306:	c0 e0       	ldi	r28, 0x00	; 0
+	if(NULL_PTR!=pvid_str)
+	{
+		uint8_t u8_index=0;
+		uint8_t *pu8_str=(uint8_t*)pvid_str;
+		//continue sending till you meet any terminating character
+		while((NULL!=pu8_str[u8_index])&&(CARRIAGE_RETURN!=pu8_str[u8_index])&&(NEW_LINE!=pu8_str[u8_index]))
+ 308:	f8 01       	movw	r30, r16
+ 30a:	ec 0f       	add	r30, r28
+ 30c:	f1 1d       	adc	r31, r1
+ 30e:	80 81       	ld	r24, Z
+ 310:	88 23       	and	r24, r24
+ 312:	31 f0       	breq	.+12     	; 0x320 <UART_sendString+0x32>
+ 314:	8d 30       	cpi	r24, 0x0D	; 13
+ 316:	31 f0       	breq	.+12     	; 0x324 <UART_sendString+0x36>
+ 318:	8a 30       	cpi	r24, 0x0A	; 10
+ 31a:	81 f7       	brne	.-32     	; 0x2fc <UART_sendString+0xe>
 		{
+			UART_sendChar(pu8_str[u8_index]);
 			u8_index++;
 		}
+		loc_error=EOK;
+ 31c:	81 e0       	ldi	r24, 0x01	; 1
+ 31e:	03 c0       	rjmp	.+6      	; 0x326 <UART_sendString+0x38>
+ 320:	81 e0       	ldi	r24, 0x01	; 1
+ 322:	01 c0       	rjmp	.+2      	; 0x326 <UART_sendString+0x38>
+ 324:	81 e0       	ldi	r24, 0x01	; 1
+	else
+	{
+		loc_error=ENOK;
 	}
- 354:	cf 91       	pop	r28
- 356:	1f 91       	pop	r17
- 358:	0f 91       	pop	r16
- 35a:	ff 90       	pop	r15
- 35c:	ef 90       	pop	r14
- 35e:	08 95       	ret
+	return loc_error;
+}
+ 326:	cf 91       	pop	r28
+ 328:	1f 91       	pop	r17
+ 32a:	0f 91       	pop	r16
+ 32c:	08 95       	ret
 
-00000360 <LED_init>:
+0000032e <UART_receiveString>:
+EN_ErrorStatus_t UART_receiveString(void* pvid_str)
+{
+ 32e:	ef 92       	push	r14
+ 330:	ff 92       	push	r15
+ 332:	0f 93       	push	r16
+ 334:	1f 93       	push	r17
+ 336:	cf 93       	push	r28
+	EN_ErrorStatus_t loc_error;
+	if(NULL_PTR!=pvid_str)
+ 338:	00 97       	sbiw	r24, 0x00	; 0
+ 33a:	e1 f4       	brne	.+56     	; 0x374 <UART_receiveString+0x46>
+		}
+		loc_error=EOK;
+	}
+	else
+	{
+		loc_error=ENOK;
+ 33c:	80 e0       	ldi	r24, 0x00	; 0
+ 33e:	1f c0       	rjmp	.+62     	; 0x37e <UART_receiveString+0x50>
+		uint8_t u8_index=0;
+		uint8_t *pu8_str = (uint8_t*)pvid_str;
+		//max length of received string is 255 as per requirements
+		while(u8_index<MAX_CHAR)
+		{
+			UART_receiveChar((void*)(&pu8_str[u8_index]));
+ 340:	87 01       	movw	r16, r14
+ 342:	0c 0f       	add	r16, r28
+ 344:	11 1d       	adc	r17, r1
+ 346:	c8 01       	movw	r24, r16
+ 348:	0e 94 68 01 	call	0x2d0	; 0x2d0 <UART_receiveChar>
+			//continue receiving till you meet a terminating character
+			if(NULL==pu8_str[u8_index] ||NEW_LINE==pu8_str[u8_index] ||CARRIAGE_RETURN==pu8_str[u8_index])
+ 34c:	f8 01       	movw	r30, r16
+ 34e:	90 81       	ld	r25, Z
+ 350:	99 23       	and	r25, r25
+ 352:	21 f0       	breq	.+8      	; 0x35c <UART_receiveString+0x2e>
+ 354:	9a 30       	cpi	r25, 0x0A	; 10
+ 356:	11 f0       	breq	.+4      	; 0x35c <UART_receiveString+0x2e>
+ 358:	9d 30       	cpi	r25, 0x0D	; 13
+ 35a:	21 f4       	brne	.+8      	; 0x364 <UART_receiveString+0x36>
+			{
+				//replace that character with NULL
+				pu8_str[u8_index]=NULL;
+ 35c:	f8 01       	movw	r30, r16
+ 35e:	10 82       	st	Z, r1
+			else
+			{
+				u8_index++;
+			}
+		}
+		loc_error=EOK;
+ 360:	81 e0       	ldi	r24, 0x01	; 1
+			//continue receiving till you meet a terminating character
+			if(NULL==pu8_str[u8_index] ||NEW_LINE==pu8_str[u8_index] ||CARRIAGE_RETURN==pu8_str[u8_index])
+			{
+				//replace that character with NULL
+				pu8_str[u8_index]=NULL;
+				break;
+ 362:	0d c0       	rjmp	.+26     	; 0x37e <UART_receiveString+0x50>
+			}
+			//force exit and terminate with NULL if MAX SIZE reached
+			else if ((MAX_CHAR-1)==u8_index)
+ 364:	ce 3f       	cpi	r28, 0xFE	; 254
+ 366:	21 f4       	brne	.+8      	; 0x370 <UART_receiveString+0x42>
+			{
+				pu8_str[u8_index]=NULL;
+ 368:	f8 01       	movw	r30, r16
+ 36a:	10 82       	st	Z, r1
+			else
+			{
+				u8_index++;
+			}
+		}
+		loc_error=EOK;
+ 36c:	81 e0       	ldi	r24, 0x01	; 1
+			}
+			//force exit and terminate with NULL if MAX SIZE reached
+			else if ((MAX_CHAR-1)==u8_index)
+			{
+				pu8_str[u8_index]=NULL;
+				break;
+ 36e:	07 c0       	rjmp	.+14     	; 0x37e <UART_receiveString+0x50>
+			}
+			else
+			{
+				u8_index++;
+ 370:	cf 5f       	subi	r28, 0xFF	; 255
+ 372:	02 c0       	rjmp	.+4      	; 0x378 <UART_receiveString+0x4a>
+ 374:	7c 01       	movw	r14, r24
+ 376:	c0 e0       	ldi	r28, 0x00	; 0
+	if(NULL_PTR!=pvid_str)
+	{
+		uint8_t u8_index=0;
+		uint8_t *pu8_str = (uint8_t*)pvid_str;
+		//max length of received string is 255 as per requirements
+		while(u8_index<MAX_CHAR)
+ 378:	cf 3f       	cpi	r28, 0xFF	; 255
+ 37a:	11 f7       	brne	.-60     	; 0x340 <UART_receiveString+0x12>
+			else
+			{
+				u8_index++;
+			}
+		}
+		loc_error=EOK;
+ 37c:	81 e0       	ldi	r24, 0x01	; 1
+	else
+	{
+		loc_error=ENOK;
+	}
+	return loc_error;	
+ 37e:	cf 91       	pop	r28
+ 380:	1f 91       	pop	r17
+ 382:	0f 91       	pop	r16
+ 384:	ff 90       	pop	r15
+ 386:	ef 90       	pop	r14
+ 388:	08 95       	ret
+
+0000038a <LED_init>:
 ST_DIO_config_t gst_LED2 = {'B',P6,OUTPUT};
 ST_DIO_config_t gst_LED3 = {'B',P7,OUTPUT};
 
 void LED_init(EN_LED led_num)
 {
 	switch(led_num)
- 360:	81 30       	cpi	r24, 0x01	; 1
- 362:	59 f0       	breq	.+22     	; 0x37a <LED_init+0x1a>
- 364:	28 f0       	brcs	.+10     	; 0x370 <LED_init+0x10>
- 366:	82 30       	cpi	r24, 0x02	; 2
- 368:	69 f0       	breq	.+26     	; 0x384 <LED_init+0x24>
- 36a:	83 30       	cpi	r24, 0x03	; 3
- 36c:	81 f0       	breq	.+32     	; 0x38e <LED_init+0x2e>
- 36e:	08 95       	ret
+ 38a:	81 30       	cpi	r24, 0x01	; 1
+ 38c:	59 f0       	breq	.+22     	; 0x3a4 <LED_init+0x1a>
+ 38e:	28 f0       	brcs	.+10     	; 0x39a <LED_init+0x10>
+ 390:	82 30       	cpi	r24, 0x02	; 2
+ 392:	69 f0       	breq	.+26     	; 0x3ae <LED_init+0x24>
+ 394:	83 30       	cpi	r24, 0x03	; 3
+ 396:	81 f0       	breq	.+32     	; 0x3b8 <LED_init+0x2e>
+ 398:	08 95       	ret
 	{
 		case LED0: DIO_init(&gst_LED0);break;
- 370:	89 e6       	ldi	r24, 0x69	; 105
- 372:	90 e0       	ldi	r25, 0x00	; 0
- 374:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
- 378:	08 95       	ret
+ 39a:	89 e6       	ldi	r24, 0x69	; 105
+ 39c:	90 e0       	ldi	r25, 0x00	; 0
+ 39e:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
+ 3a2:	08 95       	ret
 		case LED1: DIO_init(&gst_LED1);break;
- 37a:	86 e6       	ldi	r24, 0x66	; 102
- 37c:	90 e0       	ldi	r25, 0x00	; 0
- 37e:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
- 382:	08 95       	ret
+ 3a4:	86 e6       	ldi	r24, 0x66	; 102
+ 3a6:	90 e0       	ldi	r25, 0x00	; 0
+ 3a8:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
+ 3ac:	08 95       	ret
 		case LED2: DIO_init(&gst_LED2);break;
- 384:	83 e6       	ldi	r24, 0x63	; 99
- 386:	90 e0       	ldi	r25, 0x00	; 0
- 388:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
- 38c:	08 95       	ret
+ 3ae:	83 e6       	ldi	r24, 0x63	; 99
+ 3b0:	90 e0       	ldi	r25, 0x00	; 0
+ 3b2:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
+ 3b6:	08 95       	ret
 		case LED3: DIO_init(&gst_LED3);break;
- 38e:	80 e6       	ldi	r24, 0x60	; 96
- 390:	90 e0       	ldi	r25, 0x00	; 0
- 392:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
- 396:	08 95       	ret
+ 3b8:	80 e6       	ldi	r24, 0x60	; 96
+ 3ba:	90 e0       	ldi	r25, 0x00	; 0
+ 3bc:	0e 94 49 00 	call	0x92	; 0x92 <DIO_init>
+ 3c0:	08 95       	ret
 
-00000398 <LED_ON>:
+000003c2 <LED_ON>:
 		default: break;
 	}
 }
 void LED_ON(EN_LED led_num)
 {
 	switch(led_num)
- 398:	81 30       	cpi	r24, 0x01	; 1
- 39a:	71 f0       	breq	.+28     	; 0x3b8 <LED_ON+0x20>
- 39c:	28 f0       	brcs	.+10     	; 0x3a8 <LED_ON+0x10>
- 39e:	82 30       	cpi	r24, 0x02	; 2
- 3a0:	99 f0       	breq	.+38     	; 0x3c8 <LED_ON+0x30>
- 3a2:	83 30       	cpi	r24, 0x03	; 3
- 3a4:	c9 f0       	breq	.+50     	; 0x3d8 <LED_ON+0x40>
- 3a6:	08 95       	ret
+ 3c2:	81 30       	cpi	r24, 0x01	; 1
+ 3c4:	71 f0       	breq	.+28     	; 0x3e2 <LED_ON+0x20>
+ 3c6:	28 f0       	brcs	.+10     	; 0x3d2 <LED_ON+0x10>
+ 3c8:	82 30       	cpi	r24, 0x02	; 2
+ 3ca:	99 f0       	breq	.+38     	; 0x3f2 <LED_ON+0x30>
+ 3cc:	83 30       	cpi	r24, 0x03	; 3
+ 3ce:	c9 f0       	breq	.+50     	; 0x402 <__EEPROM_REGION_LENGTH__+0x2>
+ 3d0:	08 95       	ret
 	{
 		case LED0: DIO_write(gst_LED0.PORT,gst_LED0.Px,HIGH);break;
- 3a8:	e9 e6       	ldi	r30, 0x69	; 105
- 3aa:	f0 e0       	ldi	r31, 0x00	; 0
- 3ac:	41 e0       	ldi	r20, 0x01	; 1
- 3ae:	61 81       	ldd	r22, Z+1	; 0x01
- 3b0:	80 81       	ld	r24, Z
- 3b2:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 3b6:	08 95       	ret
+ 3d2:	e9 e6       	ldi	r30, 0x69	; 105
+ 3d4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3d6:	41 e0       	ldi	r20, 0x01	; 1
+ 3d8:	61 81       	ldd	r22, Z+1	; 0x01
+ 3da:	80 81       	ld	r24, Z
+ 3dc:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 3e0:	08 95       	ret
 		case LED1: DIO_write(gst_LED1.PORT,gst_LED1.Px,HIGH);break;
- 3b8:	e6 e6       	ldi	r30, 0x66	; 102
- 3ba:	f0 e0       	ldi	r31, 0x00	; 0
- 3bc:	41 e0       	ldi	r20, 0x01	; 1
- 3be:	61 81       	ldd	r22, Z+1	; 0x01
- 3c0:	80 81       	ld	r24, Z
- 3c2:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 3c6:	08 95       	ret
+ 3e2:	e6 e6       	ldi	r30, 0x66	; 102
+ 3e4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3e6:	41 e0       	ldi	r20, 0x01	; 1
+ 3e8:	61 81       	ldd	r22, Z+1	; 0x01
+ 3ea:	80 81       	ld	r24, Z
+ 3ec:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 3f0:	08 95       	ret
 		case LED2: DIO_write(gst_LED2.PORT,gst_LED2.Px,HIGH);break;
- 3c8:	e3 e6       	ldi	r30, 0x63	; 99
- 3ca:	f0 e0       	ldi	r31, 0x00	; 0
- 3cc:	41 e0       	ldi	r20, 0x01	; 1
- 3ce:	61 81       	ldd	r22, Z+1	; 0x01
- 3d0:	80 81       	ld	r24, Z
- 3d2:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 3d6:	08 95       	ret
+ 3f2:	e3 e6       	ldi	r30, 0x63	; 99
+ 3f4:	f0 e0       	ldi	r31, 0x00	; 0
+ 3f6:	41 e0       	ldi	r20, 0x01	; 1
+ 3f8:	61 81       	ldd	r22, Z+1	; 0x01
+ 3fa:	80 81       	ld	r24, Z
+ 3fc:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 400:	08 95       	ret
 		case LED3: DIO_write(gst_LED3.PORT,gst_LED3.Px,HIGH);break;
- 3d8:	e0 e6       	ldi	r30, 0x60	; 96
- 3da:	f0 e0       	ldi	r31, 0x00	; 0
- 3dc:	41 e0       	ldi	r20, 0x01	; 1
- 3de:	61 81       	ldd	r22, Z+1	; 0x01
- 3e0:	80 81       	ld	r24, Z
- 3e2:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 3e6:	08 95       	ret
+ 402:	e0 e6       	ldi	r30, 0x60	; 96
+ 404:	f0 e0       	ldi	r31, 0x00	; 0
+ 406:	41 e0       	ldi	r20, 0x01	; 1
+ 408:	61 81       	ldd	r22, Z+1	; 0x01
+ 40a:	80 81       	ld	r24, Z
+ 40c:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 410:	08 95       	ret
 
-000003e8 <LED_OFF>:
+00000412 <LED_OFF>:
 		default: break;
 	}
 }
 void LED_OFF(EN_LED led_num)
 {
 	switch(led_num)
- 3e8:	81 30       	cpi	r24, 0x01	; 1
- 3ea:	71 f0       	breq	.+28     	; 0x408 <__EEPROM_REGION_LENGTH__+0x8>
- 3ec:	28 f0       	brcs	.+10     	; 0x3f8 <LED_OFF+0x10>
- 3ee:	82 30       	cpi	r24, 0x02	; 2
- 3f0:	99 f0       	breq	.+38     	; 0x418 <__EEPROM_REGION_LENGTH__+0x18>
- 3f2:	83 30       	cpi	r24, 0x03	; 3
- 3f4:	c9 f0       	breq	.+50     	; 0x428 <__EEPROM_REGION_LENGTH__+0x28>
- 3f6:	08 95       	ret
+ 412:	81 30       	cpi	r24, 0x01	; 1
+ 414:	71 f0       	breq	.+28     	; 0x432 <LED_OFF+0x20>
+ 416:	28 f0       	brcs	.+10     	; 0x422 <LED_OFF+0x10>
+ 418:	82 30       	cpi	r24, 0x02	; 2
+ 41a:	99 f0       	breq	.+38     	; 0x442 <LED_OFF+0x30>
+ 41c:	83 30       	cpi	r24, 0x03	; 3
+ 41e:	c9 f0       	breq	.+50     	; 0x452 <LED_OFF+0x40>
+ 420:	08 95       	ret
 	{
 		case LED0: DIO_write(gst_LED0.PORT,gst_LED0.Px,LOW);break;
- 3f8:	e9 e6       	ldi	r30, 0x69	; 105
- 3fa:	f0 e0       	ldi	r31, 0x00	; 0
- 3fc:	40 e0       	ldi	r20, 0x00	; 0
- 3fe:	61 81       	ldd	r22, Z+1	; 0x01
- 400:	80 81       	ld	r24, Z
- 402:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 406:	08 95       	ret
+ 422:	e9 e6       	ldi	r30, 0x69	; 105
+ 424:	f0 e0       	ldi	r31, 0x00	; 0
+ 426:	40 e0       	ldi	r20, 0x00	; 0
+ 428:	61 81       	ldd	r22, Z+1	; 0x01
+ 42a:	80 81       	ld	r24, Z
+ 42c:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 430:	08 95       	ret
 		case LED1: DIO_write(gst_LED1.PORT,gst_LED1.Px,LOW);break;
- 408:	e6 e6       	ldi	r30, 0x66	; 102
- 40a:	f0 e0       	ldi	r31, 0x00	; 0
- 40c:	40 e0       	ldi	r20, 0x00	; 0
- 40e:	61 81       	ldd	r22, Z+1	; 0x01
- 410:	80 81       	ld	r24, Z
- 412:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 416:	08 95       	ret
+ 432:	e6 e6       	ldi	r30, 0x66	; 102
+ 434:	f0 e0       	ldi	r31, 0x00	; 0
+ 436:	40 e0       	ldi	r20, 0x00	; 0
+ 438:	61 81       	ldd	r22, Z+1	; 0x01
+ 43a:	80 81       	ld	r24, Z
+ 43c:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 440:	08 95       	ret
 		case LED2: DIO_write(gst_LED2.PORT,gst_LED2.Px,LOW);break;
- 418:	e3 e6       	ldi	r30, 0x63	; 99
- 41a:	f0 e0       	ldi	r31, 0x00	; 0
- 41c:	40 e0       	ldi	r20, 0x00	; 0
- 41e:	61 81       	ldd	r22, Z+1	; 0x01
- 420:	80 81       	ld	r24, Z
- 422:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 426:	08 95       	ret
+ 442:	e3 e6       	ldi	r30, 0x63	; 99
+ 444:	f0 e0       	ldi	r31, 0x00	; 0
+ 446:	40 e0       	ldi	r20, 0x00	; 0
+ 448:	61 81       	ldd	r22, Z+1	; 0x01
+ 44a:	80 81       	ld	r24, Z
+ 44c:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 450:	08 95       	ret
 		case LED3: DIO_write(gst_LED3.PORT,gst_LED3.Px,LOW);break;
- 428:	e0 e6       	ldi	r30, 0x60	; 96
- 42a:	f0 e0       	ldi	r31, 0x00	; 0
- 42c:	40 e0       	ldi	r20, 0x00	; 0
- 42e:	61 81       	ldd	r22, Z+1	; 0x01
- 430:	80 81       	ld	r24, Z
- 432:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
- 436:	08 95       	ret
+ 452:	e0 e6       	ldi	r30, 0x60	; 96
+ 454:	f0 e0       	ldi	r31, 0x00	; 0
+ 456:	40 e0       	ldi	r20, 0x00	; 0
+ 458:	61 81       	ldd	r22, Z+1	; 0x01
+ 45a:	80 81       	ld	r24, Z
+ 45c:	0e 94 c7 00 	call	0x18e	; 0x18e <DIO_write>
+ 460:	08 95       	ret
 
-00000438 <main>:
+00000462 <main>:
 #include "./03-HAL/LED/LED.h"
 #include "./02-MCAL/UART/UART_interface.h"
 #include <string.h>
 
 int main(void)
 {
- 438:	cf 93       	push	r28
- 43a:	df 93       	push	r29
- 43c:	cd b7       	in	r28, 0x3d	; 61
- 43e:	de b7       	in	r29, 0x3e	; 62
- 440:	cf 5f       	subi	r28, 0xFF	; 255
- 442:	d1 09       	sbc	r29, r1
- 444:	0f b6       	in	r0, 0x3f	; 63
- 446:	f8 94       	cli
- 448:	de bf       	out	0x3e, r29	; 62
- 44a:	0f be       	out	0x3f, r0	; 63
- 44c:	cd bf       	out	0x3d, r28	; 61
+ 462:	cf 93       	push	r28
+ 464:	df 93       	push	r29
+ 466:	cd b7       	in	r28, 0x3d	; 61
+ 468:	de b7       	in	r29, 0x3e	; 62
+ 46a:	cf 5f       	subi	r28, 0xFF	; 255
+ 46c:	d1 09       	sbc	r29, r1
+ 46e:	0f b6       	in	r0, 0x3f	; 63
+ 470:	f8 94       	cli
+ 472:	de bf       	out	0x3e, r29	; 62
+ 474:	0f be       	out	0x3f, r0	; 63
+ 476:	cd bf       	out	0x3d, r28	; 61
 	uint8_t u8_val[255];
+	void *ptr =NULL_PTR;
+	ptr=u8_val;
 	UART_init();
- 44e:	0e 94 60 01 	call	0x2c0	; 0x2c0 <UART_init>
+ 478:	0e 94 60 01 	call	0x2c0	; 0x2c0 <UART_init>
 	LED_init(LED0);
- 452:	80 e0       	ldi	r24, 0x00	; 0
- 454:	0e 94 b0 01 	call	0x360	; 0x360 <LED_init>
+ 47c:	80 e0       	ldi	r24, 0x00	; 0
+ 47e:	0e 94 c5 01 	call	0x38a	; 0x38a <LED_init>
 	LED_init(LED1);
- 458:	81 e0       	ldi	r24, 0x01	; 1
- 45a:	0e 94 b0 01 	call	0x360	; 0x360 <LED_init>
+ 482:	81 e0       	ldi	r24, 0x01	; 1
+ 484:	0e 94 c5 01 	call	0x38a	; 0x38a <LED_init>
 	LED_init(LED2);
- 45e:	82 e0       	ldi	r24, 0x02	; 2
- 460:	0e 94 b0 01 	call	0x360	; 0x360 <LED_init>
+ 488:	82 e0       	ldi	r24, 0x02	; 2
+ 48a:	0e 94 c5 01 	call	0x38a	; 0x38a <LED_init>
     /* Replace with your application code */
     while (1) 
     {
-		UART_sendString((uint8_t*)("ENTER A COMMAND : "));
- 464:	8c e6       	ldi	r24, 0x6C	; 108
- 466:	90 e0       	ldi	r25, 0x00	; 0
- 468:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
-		UART_receiveString(u8_val);
- 46c:	ce 01       	movw	r24, r28
- 46e:	01 96       	adiw	r24, 0x01	; 1
- 470:	0e 94 89 01 	call	0x312	; 0x312 <UART_receiveString>
-		UART_sendString(u8_val);
- 474:	ce 01       	movw	r24, r28
- 476:	01 96       	adiw	r24, 0x01	; 1
- 478:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
-		if(strcmp((const char*)u8_val,(const char*)("START"))==0)
- 47c:	6f e7       	ldi	r22, 0x7F	; 127
- 47e:	70 e0       	ldi	r23, 0x00	; 0
- 480:	ce 01       	movw	r24, r28
- 482:	01 96       	adiw	r24, 0x01	; 1
- 484:	0e 94 b5 02 	call	0x56a	; 0x56a <strcmp>
- 488:	89 2b       	or	r24, r25
- 48a:	a1 f4       	brne	.+40     	; 0x4b4 <main+0x7c>
+		UART_sendString((void*)("ENTER A COMMAND : "));
+ 48e:	8c e6       	ldi	r24, 0x6C	; 108
+ 490:	90 e0       	ldi	r25, 0x00	; 0
+ 492:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+		UART_receiveString(ptr);
+ 496:	ce 01       	movw	r24, r28
+ 498:	01 96       	adiw	r24, 0x01	; 1
+ 49a:	0e 94 97 01 	call	0x32e	; 0x32e <UART_receiveString>
+		UART_sendString(ptr);
+ 49e:	ce 01       	movw	r24, r28
+ 4a0:	01 96       	adiw	r24, 0x01	; 1
+ 4a2:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+		if(strcmp((const char*)ptr,(const char*)("START"))==0)
+ 4a6:	6f e7       	ldi	r22, 0x7F	; 127
+ 4a8:	70 e0       	ldi	r23, 0x00	; 0
+ 4aa:	ce 01       	movw	r24, r28
+ 4ac:	01 96       	adiw	r24, 0x01	; 1
+ 4ae:	0e 94 ca 02 	call	0x594	; 0x594 <strcmp>
+ 4b2:	89 2b       	or	r24, r25
+ 4b4:	a1 f4       	brne	.+40     	; 0x4de <main+0x7c>
 		{
 			LED_ON(LED0);
- 48c:	80 e0       	ldi	r24, 0x00	; 0
- 48e:	0e 94 cc 01 	call	0x398	; 0x398 <LED_ON>
+ 4b6:	80 e0       	ldi	r24, 0x00	; 0
+ 4b8:	0e 94 e1 01 	call	0x3c2	; 0x3c2 <LED_ON>
 			LED_OFF(LED1);
- 492:	81 e0       	ldi	r24, 0x01	; 1
- 494:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 4bc:	81 e0       	ldi	r24, 0x01	; 1
+ 4be:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			LED_OFF(LED2);
- 498:	82 e0       	ldi	r24, 0x02	; 2
- 49a:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 4c2:	82 e0       	ldi	r24, 0x02	; 2
+ 4c4:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			UART_sendChar('\n');
- 49e:	8a e0       	ldi	r24, 0x0A	; 10
- 4a0:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 4c8:	8a e0       	ldi	r24, 0x0A	; 10
+ 4ca:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 			UART_sendChar('\r');
- 4a4:	8d e0       	ldi	r24, 0x0D	; 13
- 4a6:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
-			UART_sendString((uint8_t*)("LED 0 IS ON"));	
- 4aa:	85 e8       	ldi	r24, 0x85	; 133
- 4ac:	90 e0       	ldi	r25, 0x00	; 0
- 4ae:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
- 4b2:	54 c0       	rjmp	.+168    	; 0x55c <main+0x124>
+ 4ce:	8d e0       	ldi	r24, 0x0D	; 13
+ 4d0:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
+			UART_sendString((void*)("LED 0 IS ON"));	
+ 4d4:	85 e8       	ldi	r24, 0x85	; 133
+ 4d6:	90 e0       	ldi	r25, 0x00	; 0
+ 4d8:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+ 4dc:	54 c0       	rjmp	.+168    	; 0x586 <main+0x124>
 		}
-		else if(strcmp((const char *)u8_val,"WAIT")==0)
- 4b4:	61 e9       	ldi	r22, 0x91	; 145
- 4b6:	70 e0       	ldi	r23, 0x00	; 0
- 4b8:	ce 01       	movw	r24, r28
- 4ba:	01 96       	adiw	r24, 0x01	; 1
- 4bc:	0e 94 b5 02 	call	0x56a	; 0x56a <strcmp>
- 4c0:	89 2b       	or	r24, r25
- 4c2:	a1 f4       	brne	.+40     	; 0x4ec <main+0xb4>
+		else if(strcmp((const char *)ptr,"WAIT")==0)
+ 4de:	61 e9       	ldi	r22, 0x91	; 145
+ 4e0:	70 e0       	ldi	r23, 0x00	; 0
+ 4e2:	ce 01       	movw	r24, r28
+ 4e4:	01 96       	adiw	r24, 0x01	; 1
+ 4e6:	0e 94 ca 02 	call	0x594	; 0x594 <strcmp>
+ 4ea:	89 2b       	or	r24, r25
+ 4ec:	a1 f4       	brne	.+40     	; 0x516 <main+0xb4>
 		{
 			LED_ON(LED1);
- 4c4:	81 e0       	ldi	r24, 0x01	; 1
- 4c6:	0e 94 cc 01 	call	0x398	; 0x398 <LED_ON>
+ 4ee:	81 e0       	ldi	r24, 0x01	; 1
+ 4f0:	0e 94 e1 01 	call	0x3c2	; 0x3c2 <LED_ON>
 			LED_OFF(LED0);
- 4ca:	80 e0       	ldi	r24, 0x00	; 0
- 4cc:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 4f4:	80 e0       	ldi	r24, 0x00	; 0
+ 4f6:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			LED_OFF(LED2);
- 4d0:	82 e0       	ldi	r24, 0x02	; 2
- 4d2:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 4fa:	82 e0       	ldi	r24, 0x02	; 2
+ 4fc:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			UART_sendChar('\n');
- 4d6:	8a e0       	ldi	r24, 0x0A	; 10
- 4d8:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 500:	8a e0       	ldi	r24, 0x0A	; 10
+ 502:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 			UART_sendChar('\r');
- 4dc:	8d e0       	ldi	r24, 0x0D	; 13
- 4de:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
-			UART_sendString((uint8_t*)"LED 1 IS ON");
- 4e2:	86 e9       	ldi	r24, 0x96	; 150
- 4e4:	90 e0       	ldi	r25, 0x00	; 0
- 4e6:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
- 4ea:	38 c0       	rjmp	.+112    	; 0x55c <main+0x124>
+ 506:	8d e0       	ldi	r24, 0x0D	; 13
+ 508:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
+			UART_sendString((void*)"LED 1 IS ON");
+ 50c:	86 e9       	ldi	r24, 0x96	; 150
+ 50e:	90 e0       	ldi	r25, 0x00	; 0
+ 510:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+ 514:	38 c0       	rjmp	.+112    	; 0x586 <main+0x124>
 		}
-		else if(strcmp((const char *)u8_val,"STOP")==0)
- 4ec:	62 ea       	ldi	r22, 0xA2	; 162
- 4ee:	70 e0       	ldi	r23, 0x00	; 0
- 4f0:	ce 01       	movw	r24, r28
- 4f2:	01 96       	adiw	r24, 0x01	; 1
- 4f4:	0e 94 b5 02 	call	0x56a	; 0x56a <strcmp>
- 4f8:	89 2b       	or	r24, r25
- 4fa:	a1 f4       	brne	.+40     	; 0x524 <main+0xec>
+		else if(strcmp((const char *)ptr,"STOP")==0)
+ 516:	62 ea       	ldi	r22, 0xA2	; 162
+ 518:	70 e0       	ldi	r23, 0x00	; 0
+ 51a:	ce 01       	movw	r24, r28
+ 51c:	01 96       	adiw	r24, 0x01	; 1
+ 51e:	0e 94 ca 02 	call	0x594	; 0x594 <strcmp>
+ 522:	89 2b       	or	r24, r25
+ 524:	a1 f4       	brne	.+40     	; 0x54e <main+0xec>
 		{
 			LED_ON(LED2);
- 4fc:	82 e0       	ldi	r24, 0x02	; 2
- 4fe:	0e 94 cc 01 	call	0x398	; 0x398 <LED_ON>
+ 526:	82 e0       	ldi	r24, 0x02	; 2
+ 528:	0e 94 e1 01 	call	0x3c2	; 0x3c2 <LED_ON>
 			LED_OFF(LED1);
- 502:	81 e0       	ldi	r24, 0x01	; 1
- 504:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 52c:	81 e0       	ldi	r24, 0x01	; 1
+ 52e:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			LED_OFF(LED0);
- 508:	80 e0       	ldi	r24, 0x00	; 0
- 50a:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 532:	80 e0       	ldi	r24, 0x00	; 0
+ 534:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			UART_sendChar('\n');
- 50e:	8a e0       	ldi	r24, 0x0A	; 10
- 510:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 538:	8a e0       	ldi	r24, 0x0A	; 10
+ 53a:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 			UART_sendChar('\r');
- 514:	8d e0       	ldi	r24, 0x0D	; 13
- 516:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
-			UART_sendString((uint8_t*)"LED 2 IS ON");
- 51a:	87 ea       	ldi	r24, 0xA7	; 167
- 51c:	90 e0       	ldi	r25, 0x00	; 0
- 51e:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
- 522:	1c c0       	rjmp	.+56     	; 0x55c <main+0x124>
+ 53e:	8d e0       	ldi	r24, 0x0D	; 13
+ 540:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
+			UART_sendString((void*)"LED 2 IS ON");
+ 544:	87 ea       	ldi	r24, 0xA7	; 167
+ 546:	90 e0       	ldi	r25, 0x00	; 0
+ 548:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+ 54c:	1c c0       	rjmp	.+56     	; 0x586 <main+0x124>
 		}
 		else if(strcmp((const char *)u8_val,"AT")==0)
- 524:	63 eb       	ldi	r22, 0xB3	; 179
- 526:	70 e0       	ldi	r23, 0x00	; 0
- 528:	ce 01       	movw	r24, r28
- 52a:	01 96       	adiw	r24, 0x01	; 1
- 52c:	0e 94 b5 02 	call	0x56a	; 0x56a <strcmp>
- 530:	89 2b       	or	r24, r25
- 532:	59 f4       	brne	.+22     	; 0x54a <main+0x112>
+ 54e:	63 eb       	ldi	r22, 0xB3	; 179
+ 550:	70 e0       	ldi	r23, 0x00	; 0
+ 552:	ce 01       	movw	r24, r28
+ 554:	01 96       	adiw	r24, 0x01	; 1
+ 556:	0e 94 ca 02 	call	0x594	; 0x594 <strcmp>
+ 55a:	89 2b       	or	r24, r25
+ 55c:	59 f4       	brne	.+22     	; 0x574 <main+0x112>
 		{
 			UART_sendChar('\n');
- 534:	8a e0       	ldi	r24, 0x0A	; 10
- 536:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 55e:	8a e0       	ldi	r24, 0x0A	; 10
+ 560:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 			UART_sendChar('\r');
- 53a:	8d e0       	ldi	r24, 0x0D	; 13
- 53c:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
-			UART_sendString((uint8_t*)"OK");
- 540:	86 eb       	ldi	r24, 0xB6	; 182
- 542:	90 e0       	ldi	r25, 0x00	; 0
- 544:	0e 94 72 01 	call	0x2e4	; 0x2e4 <UART_sendString>
- 548:	09 c0       	rjmp	.+18     	; 0x55c <main+0x124>
+ 564:	8d e0       	ldi	r24, 0x0D	; 13
+ 566:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
+			UART_sendString((void*)"OK");
+ 56a:	86 eb       	ldi	r24, 0xB6	; 182
+ 56c:	90 e0       	ldi	r25, 0x00	; 0
+ 56e:	0e 94 77 01 	call	0x2ee	; 0x2ee <UART_sendString>
+ 572:	09 c0       	rjmp	.+18     	; 0x586 <main+0x124>
 		}
 		else
 		{
 			LED_OFF(LED2);
- 54a:	82 e0       	ldi	r24, 0x02	; 2
- 54c:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 574:	82 e0       	ldi	r24, 0x02	; 2
+ 576:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			LED_OFF(LED1);
- 550:	81 e0       	ldi	r24, 0x01	; 1
- 552:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 57a:	81 e0       	ldi	r24, 0x01	; 1
+ 57c:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 			LED_OFF(LED0);
- 556:	80 e0       	ldi	r24, 0x00	; 0
- 558:	0e 94 f4 01 	call	0x3e8	; 0x3e8 <LED_OFF>
+ 580:	80 e0       	ldi	r24, 0x00	; 0
+ 582:	0e 94 09 02 	call	0x412	; 0x412 <LED_OFF>
 		}
 		UART_sendChar('\n');
- 55c:	8a e0       	ldi	r24, 0x0A	; 10
- 55e:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 586:	8a e0       	ldi	r24, 0x0A	; 10
+ 588:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
 		UART_sendChar('\r');
- 562:	8d e0       	ldi	r24, 0x0D	; 13
- 564:	0e 94 6e 01 	call	0x2dc	; 0x2dc <UART_sendChar>
+ 58c:	8d e0       	ldi	r24, 0x0D	; 13
+ 58e:	0e 94 73 01 	call	0x2e6	; 0x2e6 <UART_sendChar>
     }
- 568:	7d cf       	rjmp	.-262    	; 0x464 <main+0x2c>
+ 592:	7d cf       	rjmp	.-262    	; 0x48e <main+0x2c>
 
-0000056a <strcmp>:
- 56a:	fb 01       	movw	r30, r22
- 56c:	dc 01       	movw	r26, r24
- 56e:	8d 91       	ld	r24, X+
- 570:	01 90       	ld	r0, Z+
- 572:	80 19       	sub	r24, r0
- 574:	01 10       	cpse	r0, r1
- 576:	d9 f3       	breq	.-10     	; 0x56e <strcmp+0x4>
- 578:	99 0b       	sbc	r25, r25
- 57a:	08 95       	ret
+00000594 <strcmp>:
+ 594:	fb 01       	movw	r30, r22
+ 596:	dc 01       	movw	r26, r24
+ 598:	8d 91       	ld	r24, X+
+ 59a:	01 90       	ld	r0, Z+
+ 59c:	80 19       	sub	r24, r0
+ 59e:	01 10       	cpse	r0, r1
+ 5a0:	d9 f3       	breq	.-10     	; 0x598 <strcmp+0x4>
+ 5a2:	99 0b       	sbc	r25, r25
+ 5a4:	08 95       	ret
 
-0000057c <_exit>:
- 57c:	f8 94       	cli
+000005a6 <_exit>:
+ 5a6:	f8 94       	cli
 
-0000057e <__stop_program>:
- 57e:	ff cf       	rjmp	.-2      	; 0x57e <__stop_program>
+000005a8 <__stop_program>:
+ 5a8:	ff cf       	rjmp	.-2      	; 0x5a8 <__stop_program>

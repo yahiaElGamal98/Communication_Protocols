@@ -8,6 +8,12 @@
 
 #define NULL_PTR 0
 
+typedef enum
+{
+	ENOK,
+	EOK
+}EN_ErrorStatus_t;
+
 typedef unsigned				char		uint8_t;
 typedef unsigned short			int 		uint16_t;
 typedef unsigned long			int			uint32_t;
